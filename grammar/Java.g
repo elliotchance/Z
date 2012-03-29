@@ -8,7 +8,7 @@ tokens {
 	K_STATIC = 'static';
 }
 
-@header {
+@parser::header {
 	package org.z.lexer;
 }
 
@@ -80,47 +80,191 @@ UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
     ;
     
-class_def
-	:	K_PUBLIC? K_CLASS ID '{' method* '}' EOF
+run returns [org.z.lexer.grammar.File result]
+	:	{
+			$result = new org.z.lexer.grammar.File();
+		}
+		(def=classDefinition {
+			$result.addClass(def.result);
+		})*
+		EOF
+	;
+    
+classDefinition returns [org.z.lexer.grammar.Class result]
+	:	isPublic=K_PUBLIC? K_CLASS className=ID '{'
+		{
+			$result = new org.z.lexer.grammar.Class();
+			$result.setName(className.getText());
+			$result.setIsPublic(isPublic != null);
+		}
+		(m=method {
+			$result.addMethod(m.result);
+		})*
+		'}'
+		EOF
 	;
 		
 permission
 	:	K_PUBLIC | K_PROTECTED | K_PRIVATE
 	;
-	
-method
-	:	permission? K_STATIC? ID ID '(' functionArg? (',' functionArg)* ')' '{' complexStatement '}'
+		
+type returns [org.z.lexer.grammar.Type result]
+	:	base=ID
+		{
+			$result = new org.z.lexer.grammar.Type();
+			$result.setBase(base.getText());
+		}
+		('[]' {
+			$result.setDepth($result.getDepth() + 1);
+		})*
 	;
 	
-functionArg
-	:	ID ID
+method returns [org.z.lexer.grammar.Method result]
+	:	thePermission=(permission?) isStatic=K_STATIC? returnType=type name=ID
+		'(' args=argumentList ')'
+		'{'
+		stmts=statementList
+		'}'
+		{
+			$result = new org.z.lexer.grammar.Method();
+			if(thePermission != null)
+				$result.setPermission(thePermission.getText());
+			$result.setIsStatic(isStatic != null);
+			$result.setReturnType(returnType.result);
+			$result.setName(name.getText());
+			$result.setArguments(args.result);
+			if(stmts != null)
+				$result.setStatements(stmts.result);
+		}
 	;
 	
-complexStatement
-	:	simpleStatement ';'
-	;
-
-simpleStatement
-	:	expression
-	;
-
-expression
-	:	object_access
-	|	function_call
-	|	value
+statementList returns [org.z.lexer.grammar.StatementList result]
+	:	{
+			$result = new org.z.lexer.grammar.StatementList();
+		}
+		(stmt=statement
+		{
+			$result.add(stmt.result);
+		})*
 	;
 	
-object_access
-	:	ID '.' (object_access | function_call)
+argumentList returns [org.z.lexer.grammar.ArgumentList result]
+	:	{
+			$result = new org.z.lexer.grammar.ArgumentList();
+		}
+		def=argument?
+		{
+			if(def != null)
+				$result.add(def.result);
+		}
+		(',' def=argument
+		{
+			$result.add(def.result);
+		})*
+	;
+	
+argument returns [org.z.lexer.grammar.Argument result]
+	:	theType=type name=ID
+		{
+			$result = new org.z.lexer.grammar.Argument();
+			$result.setType(theType.result);
+			$result.setName(name.getText());
+		}
+	;
+	
+statement returns [org.z.lexer.grammar.Statement result]
+	:	stmt=simpleStatement
+		{
+			$result = stmt.result;
+		}
 	;
 
-value
-	:	INT
-	|	FLOAT
-	|	STRING
-	|	CHAR
+simpleStatement returns [org.z.lexer.grammar.SimpleStatement result]
+	:	expr=expression
+		{
+			$result = new org.z.lexer.grammar.SimpleStatement();
+			$result.setExpression(expr.result);
+		}
+		';'
 	;
 
-function_call
-	:	ID '(' expression? (',' expression)* ')'
+expression returns [org.z.lexer.grammar.Expression result]
+	:	expr=functionCall
+		{
+			$result = expr.result;
+		}
+	;
+		
+functionCall returns [org.z.lexer.grammar.FunctionCall result]
+	:	expr=objectAccess
+		{
+			$result = new org.z.lexer.grammar.FunctionCall();
+			$result.setExpression(expr.result);
+		}
+		('(' args=expressionList ')'
+		{
+			$result.setArguments(args.result);
+		})?
+	;
+		
+objectAccess returns [org.z.lexer.grammar.ObjectAccess result]
+	:	{
+			$result = new org.z.lexer.grammar.ObjectAccess();
+		}
+		left=value
+		{
+			$result.setLeft(left.result);
+		}
+		('.'^ right=expression
+		{
+			$result.setRight(right.result);
+		})?
+	;
+	
+unaryExpression returns [org.z.lexer.grammar.UnaryExpression result]
+	:	expr=value
+		{
+			$result = expr.result;
+		}
+	;
+
+value returns [org.z.lexer.grammar.Value result]
+	:	{
+			$result = new org.z.lexer.grammar.Value();
+		}
+		(x1=INT
+		{
+			$result.setValue(Integer.valueOf(x1.getText()));
+		}
+	|	x2=FLOAT
+		{
+			$result.setValue(Float.valueOf(x2.getText()));
+		}
+	|	x3=STRING
+		{
+			$result.setValue(x3.getText());
+		}
+	|	x4=CHAR
+		{
+			$result.setValue(new Character(x4.getText().charAt(0)));
+		}
+	|	x5=ID
+		{
+			$result.setValue(x5.getText());
+		})
+	;
+
+expressionList returns [org.z.lexer.grammar.ExpressionList result]
+	:	expr=expression?
+		{
+			$result = new org.z.lexer.grammar.ExpressionList();
+			if(expr != null)
+				$result.add(expr.result);
+		}
+		(','
+		expr=expression
+		{
+			$result.add(expr.result);
+		}
+		)*
 	;

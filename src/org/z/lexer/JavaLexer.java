@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-03-28 21:27:20
+// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-03-30 00:02:19
 
 	package org.z.lexer;
 
@@ -18,6 +18,7 @@ public class JavaLexer extends Lexer {
     public static final int T__25=25;
     public static final int T__26=26;
     public static final int T__27=27;
+    public static final int T__28=28;
     public static final int CHAR=4;
     public static final int COMMENT=5;
     public static final int ESC_SEQ=6;
@@ -276,10 +277,12 @@ public class JavaLexer extends Lexer {
         try {
             int _type = T__26;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:16:7: ( '{' )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:16:9: '{'
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:16:7: ( '[]' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:16:9: '[]'
             {
-            match('{'); 
+            match("[]"); 
+
+
 
             }
 
@@ -297,8 +300,29 @@ public class JavaLexer extends Lexer {
         try {
             int _type = T__27;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:17:7: ( '}' )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:17:9: '}'
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:17:7: ( '{' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:17:9: '{'
+            {
+            match('{'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__27"
+
+    // $ANTLR start "T__28"
+    public final void mT__28() throws RecognitionException {
+        try {
+            int _type = T__28;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:18:7: ( '}' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:18:9: '}'
             {
             match('}'); 
 
@@ -311,7 +335,7 @@ public class JavaLexer extends Lexer {
         	// do for sure before leaving
         }
     }
-    // $ANTLR end "T__27"
+    // $ANTLR end "T__28"
 
     // $ANTLR start "ID"
     public final void mID() throws RecognitionException {
@@ -1391,8 +1415,8 @@ public class JavaLexer extends Lexer {
     // $ANTLR end "UNICODE_ESC"
 
     public void mTokens() throws RecognitionException {
-        // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:8: ( K_CLASS | K_PRIVATE | K_PROTECTED | K_PUBLIC | K_STATIC | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | ID | INT | FLOAT | COMMENT | WS | STRING | CHAR )
-        int alt20=19;
+        // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:8: ( K_CLASS | K_PRIVATE | K_PROTECTED | K_PUBLIC | K_STATIC | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | ID | INT | FLOAT | COMMENT | WS | STRING | CHAR )
+        int alt20=20;
         alt20 = dfa20.predict(input);
         switch (alt20) {
             case 1 :
@@ -1492,55 +1516,63 @@ public class JavaLexer extends Lexer {
                 }
                 break;
             case 13 :
-                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:100: ID
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:100: T__28
+                {
+                mT__28(); 
+
+
+                }
+                break;
+            case 14 :
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:106: ID
                 {
                 mID(); 
 
 
                 }
                 break;
-            case 14 :
-                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:103: INT
+            case 15 :
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:109: INT
                 {
                 mINT(); 
 
 
                 }
                 break;
-            case 15 :
-                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:107: FLOAT
+            case 16 :
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:113: FLOAT
                 {
                 mFLOAT(); 
 
 
                 }
                 break;
-            case 16 :
-                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:113: COMMENT
+            case 17 :
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:119: COMMENT
                 {
                 mCOMMENT(); 
 
 
                 }
                 break;
-            case 17 :
-                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:121: WS
+            case 18 :
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:127: WS
                 {
                 mWS(); 
 
 
                 }
                 break;
-            case 18 :
-                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:124: STRING
+            case 19 :
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:130: STRING
                 {
                 mSTRING(); 
 
 
                 }
                 break;
-            case 19 :
-                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:131: CHAR
+            case 20 :
+                // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:1:137: CHAR
                 {
                 mCHAR(); 
 
@@ -1609,56 +1641,56 @@ public class JavaLexer extends Lexer {
         }
     }
     static final String DFA20_eotS =
-        "\1\uffff\3\13\3\uffff\1\25\4\uffff\1\27\4\uffff\4\13\3\uffff\12"+
-        "\13\1\47\4\13\1\uffff\2\13\1\56\1\57\1\60\1\13\3\uffff\1\13\1\63"+
+        "\1\uffff\3\14\3\uffff\1\26\5\uffff\1\30\4\uffff\4\14\3\uffff\12"+
+        "\14\1\50\4\14\1\uffff\2\14\1\57\1\60\1\61\1\14\3\uffff\1\14\1\64"+
         "\1\uffff";
     static final String DFA20_eofS =
-        "\64\uffff";
+        "\65\uffff";
     static final String DFA20_minS =
-        "\1\11\1\154\1\162\1\164\3\uffff\1\60\4\uffff\1\56\4\uffff\1\141"+
+        "\1\11\1\154\1\162\1\164\3\uffff\1\60\5\uffff\1\56\4\uffff\1\141"+
         "\1\151\1\142\1\141\3\uffff\1\163\1\166\1\164\1\154\1\164\1\163\1"+
         "\141\1\145\2\151\1\60\1\164\3\143\1\uffff\1\145\1\164\3\60\1\145"+
         "\3\uffff\1\144\1\60\1\uffff";
     static final String DFA20_maxS =
-        "\1\175\1\154\1\165\1\164\3\uffff\1\71\4\uffff\1\145\4\uffff\1\141"+
+        "\1\175\1\154\1\165\1\164\3\uffff\1\71\5\uffff\1\145\4\uffff\1\141"+
         "\1\157\1\142\1\141\3\uffff\1\163\1\166\1\164\1\154\1\164\1\163\1"+
         "\141\1\145\2\151\1\172\1\164\3\143\1\uffff\1\145\1\164\3\172\1\145"+
         "\3\uffff\1\144\1\172\1\uffff";
     static final String DFA20_acceptS =
-        "\4\uffff\1\6\1\7\1\10\1\uffff\1\12\1\13\1\14\1\15\1\uffff\1\20\1"+
-        "\21\1\22\1\23\4\uffff\1\11\1\17\1\16\17\uffff\1\1\6\uffff\1\4\1"+
-        "\5\1\2\2\uffff\1\3";
+        "\4\uffff\1\6\1\7\1\10\1\uffff\1\12\1\13\1\14\1\15\1\16\1\uffff\1"+
+        "\21\1\22\1\23\1\24\4\uffff\1\11\1\20\1\17\17\uffff\1\1\6\uffff\1"+
+        "\4\1\5\1\2\2\uffff\1\3";
     static final String DFA20_specialS =
-        "\64\uffff}>";
+        "\65\uffff}>";
     static final String[] DFA20_transitionS = {
-            "\2\16\2\uffff\1\16\22\uffff\1\16\1\uffff\1\17\4\uffff\1\20\1"+
-            "\4\1\5\2\uffff\1\6\1\uffff\1\7\1\15\12\14\1\uffff\1\10\5\uffff"+
-            "\32\13\4\uffff\1\13\1\uffff\2\13\1\1\14\13\1\2\2\13\1\3\7\13"+
-            "\1\11\1\uffff\1\12",
-            "\1\21",
-            "\1\22\2\uffff\1\23",
-            "\1\24",
+            "\2\17\2\uffff\1\17\22\uffff\1\17\1\uffff\1\20\4\uffff\1\21\1"+
+            "\4\1\5\2\uffff\1\6\1\uffff\1\7\1\16\12\15\1\uffff\1\10\5\uffff"+
+            "\32\14\1\11\3\uffff\1\14\1\uffff\2\14\1\1\14\14\1\2\2\14\1\3"+
+            "\7\14\1\12\1\uffff\1\13",
+            "\1\22",
+            "\1\23\2\uffff\1\24",
+            "\1\25",
             "",
             "",
             "",
-            "\12\26",
-            "",
-            "",
-            "",
-            "",
-            "\1\26\1\uffff\12\14\13\uffff\1\26\37\uffff\1\26",
+            "\12\27",
             "",
             "",
             "",
             "",
-            "\1\30",
-            "\1\31\5\uffff\1\32",
-            "\1\33",
+            "",
+            "\1\27\1\uffff\12\15\13\uffff\1\27\37\uffff\1\27",
+            "",
+            "",
+            "",
+            "",
+            "\1\31",
+            "\1\32\5\uffff\1\33",
             "\1\34",
-            "",
-            "",
-            "",
             "\1\35",
+            "",
+            "",
+            "",
             "\1\36",
             "\1\37",
             "\1\40",
@@ -1668,23 +1700,24 @@ public class JavaLexer extends Lexer {
             "\1\44",
             "\1\45",
             "\1\46",
-            "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
-            "\1\50",
+            "\1\47",
+            "\12\14\7\uffff\32\14\4\uffff\1\14\1\uffff\32\14",
             "\1\51",
             "\1\52",
             "\1\53",
-            "",
             "\1\54",
+            "",
             "\1\55",
-            "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
-            "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
-            "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
-            "\1\61",
-            "",
-            "",
-            "",
+            "\1\56",
+            "\12\14\7\uffff\32\14\4\uffff\1\14\1\uffff\32\14",
+            "\12\14\7\uffff\32\14\4\uffff\1\14\1\uffff\32\14",
+            "\12\14\7\uffff\32\14\4\uffff\1\14\1\uffff\32\14",
             "\1\62",
-            "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
+            "",
+            "",
+            "",
+            "\1\63",
+            "\12\14\7\uffff\32\14\4\uffff\1\14\1\uffff\32\14",
             ""
     };
 
@@ -1718,7 +1751,7 @@ public class JavaLexer extends Lexer {
             this.transition = DFA20_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( K_CLASS | K_PRIVATE | K_PROTECTED | K_PUBLIC | K_STATIC | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | ID | INT | FLOAT | COMMENT | WS | STRING | CHAR );";
+            return "1:1: Tokens : ( K_CLASS | K_PRIVATE | K_PROTECTED | K_PUBLIC | K_STATIC | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | ID | INT | FLOAT | COMMENT | WS | STRING | CHAR );";
         }
     }
  
