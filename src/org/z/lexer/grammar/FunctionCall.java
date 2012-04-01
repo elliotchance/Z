@@ -28,11 +28,11 @@ public class FunctionCall implements Expression
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
-		String r = expression.renderJava();
+		String r = expression.toString();
 		if(arguments != null)
-			r += "(" + arguments.renderJava() + ")";
+			r += "(" + arguments.toString() + ")";
 		return r;
 	}
 	

@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class Argument implements JavaRenderable
+public class Argument
 {
 	
 	private Type type;
@@ -28,9 +28,9 @@ public class Argument implements JavaRenderable
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
-		return type.renderJava() + " " + name;
+		return type.toString() + " " + name;
 	}
 	
 }

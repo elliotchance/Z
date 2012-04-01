@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class Method implements JavaRenderable
+public class Method
 {
 	
 	private String name;
@@ -76,7 +76,7 @@ public class Method implements JavaRenderable
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
 		StringBuilder r = new StringBuilder("\t");
 		if(permission != null) {
@@ -85,13 +85,13 @@ public class Method implements JavaRenderable
 		}
 		if(isStatic)
 			r.append("static ");
-		r.append(returnType.renderJava());
+		r.append(returnType.toString());
 		r.append(" ");
 		r.append(name);
 		r.append("(");
-		r.append(arguments.renderJava());
+		r.append(arguments.toString());
 		r.append(") {\n");
-		r.append(statements.renderJava());
+		r.append(statements.toString());
 		r.append("\t}");
 		return r.toString();
 	}

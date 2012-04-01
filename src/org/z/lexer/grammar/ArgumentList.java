@@ -2,11 +2,11 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class ArgumentList extends ArrayList<Argument> implements JavaRenderable
+public class ArgumentList extends ArrayList<Argument>
 {
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
 		StringBuilder r = new StringBuilder();
 		boolean first = true;
@@ -15,7 +15,7 @@ public class ArgumentList extends ArrayList<Argument> implements JavaRenderable
 				first = false;
 			else
 				r.append(", ");
-			r.append(a.renderJava());
+			r.append(a.toString());
 		}
 		return r.toString();
 	}

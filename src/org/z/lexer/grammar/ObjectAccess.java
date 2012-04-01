@@ -28,11 +28,11 @@ public class ObjectAccess implements BinaryExpression
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
-		String r = (left == null ? "null" : left.renderJava());
+		String r = (left == null ? "null" : left.toString());
 		if(right != null)
-			r += "." + (right == null ? "null" : right.renderJava());
+			r += "." + (right == null ? "null" : right.toString());
 		return r;
 	}
 	

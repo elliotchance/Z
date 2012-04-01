@@ -3,9 +3,11 @@ package org.z;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.z.compiler.CompiledFile;
 import org.z.lexer.JavaLexer;
 import org.z.lexer.JavaParser;
 import org.z.lexer.grammar.File;
@@ -32,8 +34,18 @@ public class Main {
 
 			JavaParser g = new JavaParser(tokens);
 			try {
+				// parse
 				File f = g.run().result;
-				System.out.println(f.renderJava());
+				f.setFileName("HelloWorldApp.java");
+				
+				// compile
+				org.z.compiler.Compiler c = new org.z.compiler.java.Compiler();
+				c.addFile(f);
+				ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
+				for(CompiledFile cf : compiledFiles) {
+					System.out.println("=== " + cf.getFileName() + " ===");
+					System.out.println(cf.getContent());
+				}
 			}
 			catch (RecognitionException e) {
 				e.printStackTrace();

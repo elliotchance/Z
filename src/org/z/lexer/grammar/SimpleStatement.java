@@ -16,9 +16,9 @@ public class SimpleStatement implements Statement
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
-		return expression.renderJava();
+		return expression.toString();
 	}
 	
 }

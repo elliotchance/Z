@@ -11,7 +11,7 @@ public class Identifier implements Expression
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
 		return identifier;
 	}

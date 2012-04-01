@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class Class implements JavaRenderable
+public class Class
 {
 	
 	private String name = null;
@@ -32,7 +32,7 @@ public class Class implements JavaRenderable
 	}
 	
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
 		StringBuilder r = new StringBuilder();
 		r.append((isPublic ? "public " : ""));
@@ -42,7 +42,7 @@ public class Class implements JavaRenderable
 		
 		for(Method m : methods) {
 			r.append("\n");
-			r.append(m.renderJava());
+			r.append(m.toString());
 			r.append("\n");
 		}
 		

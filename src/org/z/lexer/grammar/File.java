@@ -2,8 +2,10 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class File implements JavaRenderable
+public class File
 {
+	
+	private String fileName = null;
 	
 	private ArrayList<Class> classes = new ArrayList<Class>();
 	
@@ -13,12 +15,22 @@ public class File implements JavaRenderable
 	}
 	
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
 		StringBuilder r = new StringBuilder();
 		for(Class c : classes)
-			r.append(c.renderJava());
+			r.append(c.toString());
 		return r.toString();
+	}
+
+	public String getFileName()
+	{
+		return fileName;
+	}
+
+	public void setFileName(String fileName)
+	{
+		this.fileName = fileName;
 	}
 	
 }

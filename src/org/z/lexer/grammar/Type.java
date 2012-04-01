@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class Type implements JavaRenderable
+public class Type
 {
 	
 	private String base;
@@ -28,7 +28,7 @@ public class Type implements JavaRenderable
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
 		String r = base;
 		for(int i = 0; i < depth; ++i)

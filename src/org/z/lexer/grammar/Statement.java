@@ -1,5 +1,5 @@
 package org.z.lexer.grammar;
 
-public interface Statement extends JavaRenderable
+public interface Statement
 {
 }

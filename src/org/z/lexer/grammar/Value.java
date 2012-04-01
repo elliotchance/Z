@@ -16,7 +16,7 @@ public class Value implements UnaryExpression
 	}
 
 	@Override
-	public String renderJava() throws Exception
+	public String toString()
 	{
 		return value.toString();
 	}
