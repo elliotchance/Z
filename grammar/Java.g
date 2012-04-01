@@ -250,7 +250,7 @@ value returns [org.z.lexer.grammar.Value result]
 		}
 	|	x5=ID
 		{
-			$result.setValue(x5.getText());
+			$result.setValue(new org.z.lexer.grammar.Identifier(x5.getText()));
 		})
 	;
 

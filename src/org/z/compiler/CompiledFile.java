@@ -5,22 +5,27 @@ public class CompiledFile
 	
 	private String fileName;
 	
-	private String content;
+	private StringBuilder content;
+	
+	public CompiledFile(String fileName)
+	{
+		this(fileName, "");
+	}
 
 	public CompiledFile(String fileName, String content)
 	{
 		this.fileName = fileName;
-		this.content = content;
+		this.content = new StringBuilder(content);
 	}
 
 	public String getContent()
 	{
-		return content;
+		return content.toString();
 	}
 
 	public void setContent(String content)
 	{
-		this.content = content;
+		this.content = new StringBuilder(content);
 	}
 
 	public String getFileName()
@@ -31,6 +36,11 @@ public class CompiledFile
 	public void setFileName(String fileName)
 	{
 		this.fileName = fileName;
+	}
+	
+	public void appendContent(String str)
+	{
+		content.append(str);
 	}
 	
 }

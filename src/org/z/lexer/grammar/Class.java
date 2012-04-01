@@ -54,5 +54,10 @@ public class Class
 	{
 		methods.add(m);
 	}
+
+	public ArrayList<Method> getMethods()
+	{
+		return methods;
+	}
 	
 }

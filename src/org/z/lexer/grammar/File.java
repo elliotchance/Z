@@ -32,5 +32,10 @@ public class File
 	{
 		this.fileName = fileName;
 	}
+
+	public ArrayList<Class> getClasses()
+	{
+		return classes;
+	}
 	
 }

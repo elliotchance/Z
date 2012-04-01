@@ -38,13 +38,28 @@ public class Main {
 				File f = g.run().result;
 				f.setFileName("HelloWorldApp.java");
 				
-				// compile
-				org.z.compiler.Compiler c = new org.z.compiler.java.Compiler();
-				c.addFile(f);
-				ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
-				for(CompiledFile cf : compiledFiles) {
-					System.out.println("=== " + cf.getFileName() + " ===");
-					System.out.println(cf.getContent());
+				// compile Java
+				{
+					org.z.compiler.Compiler c = new org.z.compiler.java.Compiler();
+					c.init("HelloWorldApp");
+					c.addFile(f);
+					ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
+					for(CompiledFile cf : compiledFiles) {
+						System.out.println("=== " + cf.getFileName() + " ===");
+						System.out.println(cf.getContent());
+					}
+				}
+				
+				// compile C
+				{
+					org.z.compiler.Compiler c = new org.z.compiler.c.Compiler();
+					c.init("HelloWorldApp");
+					c.addFile(f);
+					ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
+					for(CompiledFile cf : compiledFiles) {
+						System.out.println("=== " + cf.getFileName() + " ===");
+						System.out.println(cf.getContent());
+					}
 				}
 			}
 			catch (RecognitionException e) {

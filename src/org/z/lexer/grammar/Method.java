@@ -45,7 +45,7 @@ public class Method
 		this.returnType = returnType;
 	}
 
-	public boolean isIsStatic()
+	public boolean isStatic()
 	{
 		return isStatic;
 	}

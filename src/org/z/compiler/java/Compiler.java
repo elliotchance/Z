@@ -21,5 +21,10 @@ public class Compiler implements org.z.compiler.Compiler
 	{
 		return files;
 	}
+
+	@Override
+	public void init(String entryClass) throws CompilerException
+	{
+	}
 	
 }
