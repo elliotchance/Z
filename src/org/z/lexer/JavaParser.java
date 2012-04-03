@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-04-02 00:12:03
+// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-04-02 23:00:12
 
 	package org.z.lexer;
 
@@ -1186,7 +1186,7 @@ public TreeAdaptor getTreeAdaptor() {
 
 
     // $ANTLR start "functionCall"
-    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:198:1: functionCall returns [org.z.lexer.grammar.FunctionCall result] : expr= objectAccess ( '(' args= expressionList ')' )? ;
+    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:198:1: functionCall returns [org.z.lexer.grammar.FunctionCall result] : expr= objectAccess ^ ( '(' args= expressionList ')' )? ;
     public final JavaParser.functionCall_return functionCall() throws RecognitionException {
         JavaParser.functionCall_return retval = new JavaParser.functionCall_return();
         retval.start = input.LT(1);
@@ -1205,8 +1205,8 @@ public TreeAdaptor getTreeAdaptor() {
         Object char_literal16_tree=null;
 
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:199:2: (expr= objectAccess ( '(' args= expressionList ')' )? )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:199:4: expr= objectAccess ( '(' args= expressionList ')' )?
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:199:2: (expr= objectAccess ^ ( '(' args= expressionList ')' )? )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:199:4: expr= objectAccess ^ ( '(' args= expressionList ')' )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1216,7 +1216,7 @@ public TreeAdaptor getTreeAdaptor() {
 
             state._fsp--;
 
-            adaptor.addChild(root_0, expr.getTree());
+            root_0 = (Object)adaptor.becomeRoot(expr.getTree(), root_0);
 
 
             			retval.result = new org.z.lexer.grammar.FunctionCall();
@@ -1234,21 +1234,21 @@ public TreeAdaptor getTreeAdaptor() {
                 case 1 :
                     // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:204:4: '(' args= expressionList ')'
                     {
-                    char_literal15=(Token)match(input,21,FOLLOW_21_in_functionCall1010); 
+                    char_literal15=(Token)match(input,21,FOLLOW_21_in_functionCall1011); 
                     char_literal15_tree = 
                     (Object)adaptor.create(char_literal15)
                     ;
                     adaptor.addChild(root_0, char_literal15_tree);
 
 
-                    pushFollow(FOLLOW_expressionList_in_functionCall1014);
+                    pushFollow(FOLLOW_expressionList_in_functionCall1015);
                     args=expressionList();
 
                     state._fsp--;
 
                     adaptor.addChild(root_0, args.getTree());
 
-                    char_literal16=(Token)match(input,22,FOLLOW_22_in_functionCall1016); 
+                    char_literal16=(Token)match(input,22,FOLLOW_22_in_functionCall1017); 
                     char_literal16_tree = 
                     (Object)adaptor.create(char_literal16)
                     ;
@@ -1290,14 +1290,14 @@ public TreeAdaptor getTreeAdaptor() {
 
 
     public static class objectAccess_return extends ParserRuleReturnScope {
-        public org.z.lexer.grammar.ObjectAccess result;
+        public org.z.lexer.grammar.Expression result;
         Object tree;
         public Object getTree() { return tree; }
     };
 
 
     // $ANTLR start "objectAccess"
-    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:210:1: objectAccess returns [org.z.lexer.grammar.ObjectAccess result] :left= value ( '.' ^right= expression )? ;
+    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:210:1: objectAccess returns [org.z.lexer.grammar.Expression result] : (left= value ^ ( '.' ^right= ID )* ) ;
     public final JavaParser.objectAccess_return objectAccess() throws RecognitionException {
         JavaParser.objectAccess_return retval = new JavaParser.objectAccess_return();
         retval.start = input.LT(1);
@@ -1305,70 +1305,91 @@ public TreeAdaptor getTreeAdaptor() {
 
         Object root_0 = null;
 
+        Token right=null;
         Token char_literal17=null;
         JavaParser.value_return left =null;
 
-        JavaParser.expression_return right =null;
 
-
+        Object right_tree=null;
         Object char_literal17_tree=null;
 
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:211:2: (left= value ( '.' ^right= expression )? )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:211:4: left= value ( '.' ^right= expression )?
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:211:2: ( (left= value ^ ( '.' ^right= ID )* ) )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:211:4: (left= value ^ ( '.' ^right= ID )* )
             {
             root_0 = (Object)adaptor.nil();
 
 
 
-            			retval.result = new org.z.lexer.grammar.ObjectAccess();
+            			org.z.lexer.grammar.ObjectAccess o = new org.z.lexer.grammar.ObjectAccess();
             		
 
-            pushFollow(FOLLOW_value_in_objectAccess1045);
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:214:3: (left= value ^ ( '.' ^right= ID )* )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:214:4: left= value ^ ( '.' ^right= ID )*
+            {
+            pushFollow(FOLLOW_value_in_objectAccess1047);
             left=value();
 
             state._fsp--;
 
-            adaptor.addChild(root_0, left.getTree());
+            root_0 = (Object)adaptor.becomeRoot(left.getTree(), root_0);
 
 
-            			retval.result.setLeft(left.result);
+            			o.setLeft(left.result);
             		
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:218:3: ( '.' ^right= expression )?
-            int alt11=2;
-            int LA11_0 = input.LA(1);
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:218:3: ( '.' ^right= ID )*
+            loop11:
+            do {
+                int alt11=2;
+                int LA11_0 = input.LA(1);
 
-            if ( (LA11_0==24) ) {
-                alt11=1;
+                if ( (LA11_0==24) ) {
+                    alt11=1;
+                }
+
+
+                switch (alt11) {
+            	case 1 :
+            	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:218:4: '.' ^right= ID
+            	    {
+            	    char_literal17=(Token)match(input,24,FOLLOW_24_in_objectAccess1057); 
+            	    char_literal17_tree = 
+            	    (Object)adaptor.create(char_literal17)
+            	    ;
+            	    root_0 = (Object)adaptor.becomeRoot(char_literal17_tree, root_0);
+
+
+            	    right=(Token)match(input,ID,FOLLOW_ID_in_objectAccess1062); 
+            	    right_tree = 
+            	    (Object)adaptor.create(right)
+            	    ;
+            	    adaptor.addChild(root_0, right_tree);
+
+
+
+            	    			o.addAccessor(new org.z.lexer.grammar.Identifier(right.getText()));
+            	    		
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop11;
+                }
+            } while (true);
+
+
             }
-            switch (alt11) {
-                case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:218:4: '.' ^right= expression
-                    {
-                    char_literal17=(Token)match(input,24,FOLLOW_24_in_objectAccess1054); 
-                    char_literal17_tree = 
-                    (Object)adaptor.create(char_literal17)
-                    ;
-                    root_0 = (Object)adaptor.becomeRoot(char_literal17_tree, root_0);
 
 
-                    pushFollow(FOLLOW_expression_in_objectAccess1059);
-                    right=expression();
 
-                    state._fsp--;
-
-                    adaptor.addChild(root_0, right.getTree());
-
-
-                    			retval.result.setRight(right.result);
-                    		
-
-                    }
-                    break;
-
-            }
-
+            			// cancel objectAccess
+            			if(o.getAccessors().size() == 0)
+            				retval.result = o.getLeft();
+            			else
+            				retval.result = o;
+            		
 
             }
 
@@ -1402,7 +1423,7 @@ public TreeAdaptor getTreeAdaptor() {
 
 
     // $ANTLR start "unaryExpression"
-    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:224:1: unaryExpression returns [org.z.lexer.grammar.UnaryExpression result] : expr= value ;
+    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:231:1: unaryExpression returns [org.z.lexer.grammar.UnaryExpression result] : expr= value ;
     public final JavaParser.unaryExpression_return unaryExpression() throws RecognitionException {
         JavaParser.unaryExpression_return retval = new JavaParser.unaryExpression_return();
         retval.start = input.LT(1);
@@ -1415,13 +1436,13 @@ public TreeAdaptor getTreeAdaptor() {
 
 
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:225:2: (expr= value )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:225:4: expr= value
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:232:2: (expr= value )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:232:4: expr= value
             {
             root_0 = (Object)adaptor.nil();
 
 
-            pushFollow(FOLLOW_value_in_unaryExpression1083);
+            pushFollow(FOLLOW_value_in_unaryExpression1091);
             expr=value();
 
             state._fsp--;
@@ -1464,7 +1485,7 @@ public TreeAdaptor getTreeAdaptor() {
 
 
     // $ANTLR start "value"
-    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:231:1: value returns [org.z.lexer.grammar.Value result] : (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID ) ;
+    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:238:1: value returns [org.z.lexer.grammar.Value result] : (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID ) ;
     public final JavaParser.value_return value() throws RecognitionException {
         JavaParser.value_return retval = new JavaParser.value_return();
         retval.start = input.LT(1);
@@ -1485,8 +1506,8 @@ public TreeAdaptor getTreeAdaptor() {
         Object x5_tree=null;
 
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:232:2: ( (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID ) )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:232:4: (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:239:2: ( (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID ) )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:239:4: (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID )
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1495,7 +1516,7 @@ public TreeAdaptor getTreeAdaptor() {
             			retval.result = new org.z.lexer.grammar.Value();
             		
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:235:3: (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:242:3: (x1= INT |x2= FLOAT |x3= STRING |x4= CHAR |x5= ID )
             int alt12=5;
             switch ( input.LA(1) ) {
             case INT:
@@ -1533,9 +1554,9 @@ public TreeAdaptor getTreeAdaptor() {
 
             switch (alt12) {
                 case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:235:4: x1= INT
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:242:4: x1= INT
                     {
-                    x1=(Token)match(input,INT,FOLLOW_INT_in_value1109); 
+                    x1=(Token)match(input,INT,FOLLOW_INT_in_value1117); 
                     x1_tree = 
                     (Object)adaptor.create(x1)
                     ;
@@ -1549,9 +1570,9 @@ public TreeAdaptor getTreeAdaptor() {
                     }
                     break;
                 case 2 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:239:4: x2= FLOAT
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:246:4: x2= FLOAT
                     {
-                    x2=(Token)match(input,FLOAT,FOLLOW_FLOAT_in_value1120); 
+                    x2=(Token)match(input,FLOAT,FOLLOW_FLOAT_in_value1128); 
                     x2_tree = 
                     (Object)adaptor.create(x2)
                     ;
@@ -1565,9 +1586,9 @@ public TreeAdaptor getTreeAdaptor() {
                     }
                     break;
                 case 3 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:243:4: x3= STRING
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:250:4: x3= STRING
                     {
-                    x3=(Token)match(input,STRING,FOLLOW_STRING_in_value1131); 
+                    x3=(Token)match(input,STRING,FOLLOW_STRING_in_value1139); 
                     x3_tree = 
                     (Object)adaptor.create(x3)
                     ;
@@ -1581,9 +1602,9 @@ public TreeAdaptor getTreeAdaptor() {
                     }
                     break;
                 case 4 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:247:4: x4= CHAR
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:254:4: x4= CHAR
                     {
-                    x4=(Token)match(input,CHAR,FOLLOW_CHAR_in_value1142); 
+                    x4=(Token)match(input,CHAR,FOLLOW_CHAR_in_value1150); 
                     x4_tree = 
                     (Object)adaptor.create(x4)
                     ;
@@ -1597,9 +1618,9 @@ public TreeAdaptor getTreeAdaptor() {
                     }
                     break;
                 case 5 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:251:4: x5= ID
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:258:4: x5= ID
                     {
-                    x5=(Token)match(input,ID,FOLLOW_ID_in_value1153); 
+                    x5=(Token)match(input,ID,FOLLOW_ID_in_value1161); 
                     x5_tree = 
                     (Object)adaptor.create(x5)
                     ;
@@ -1648,7 +1669,7 @@ public TreeAdaptor getTreeAdaptor() {
 
 
     // $ANTLR start "expressionList"
-    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:257:1: expressionList returns [org.z.lexer.grammar.ExpressionList result] : (expr= expression )? ( ',' expr= expression )* ;
+    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:264:1: expressionList returns [org.z.lexer.grammar.ExpressionList result] : (expr= expression )? ( ',' expr= expression )* ;
     public final JavaParser.expressionList_return expressionList() throws RecognitionException {
         JavaParser.expressionList_return retval = new JavaParser.expressionList_return();
         retval.start = input.LT(1);
@@ -1663,13 +1684,13 @@ public TreeAdaptor getTreeAdaptor() {
         Object char_literal18_tree=null;
 
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:258:2: ( (expr= expression )? ( ',' expr= expression )* )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:258:4: (expr= expression )? ( ',' expr= expression )*
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:265:2: ( (expr= expression )? ( ',' expr= expression )* )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:265:4: (expr= expression )? ( ',' expr= expression )*
             {
             root_0 = (Object)adaptor.nil();
 
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:258:8: (expr= expression )?
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:265:8: (expr= expression )?
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -1678,9 +1699,9 @@ public TreeAdaptor getTreeAdaptor() {
             }
             switch (alt13) {
                 case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:258:8: expr= expression
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:265:8: expr= expression
                     {
-                    pushFollow(FOLLOW_expression_in_expressionList1175);
+                    pushFollow(FOLLOW_expression_in_expressionList1183);
                     expr=expression();
 
                     state._fsp--;
@@ -1699,7 +1720,7 @@ public TreeAdaptor getTreeAdaptor() {
             				retval.result.add(expr.result);
             		
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:264:3: ( ',' expr= expression )*
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:271:3: ( ',' expr= expression )*
             loop14:
             do {
                 int alt14=2;
@@ -1712,16 +1733,16 @@ public TreeAdaptor getTreeAdaptor() {
 
                 switch (alt14) {
             	case 1 :
-            	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:264:4: ',' expr= expression
+            	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:271:4: ',' expr= expression
             	    {
-            	    char_literal18=(Token)match(input,23,FOLLOW_23_in_expressionList1185); 
+            	    char_literal18=(Token)match(input,23,FOLLOW_23_in_expressionList1193); 
             	    char_literal18_tree = 
             	    (Object)adaptor.create(char_literal18)
             	    ;
             	    adaptor.addChild(root_0, char_literal18_tree);
 
 
-            	    pushFollow(FOLLOW_expression_in_expressionList1191);
+            	    pushFollow(FOLLOW_expression_in_expressionList1199);
             	    expr=expression();
 
             	    state._fsp--;
@@ -1801,20 +1822,20 @@ public TreeAdaptor getTreeAdaptor() {
     public static final BitSet FOLLOW_25_in_simpleStatement961 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_functionCall_in_expression978 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_objectAccess_in_functionCall1001 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_21_in_functionCall1010 = new BitSet(new long[]{0x0000000000C40D10L});
-    public static final BitSet FOLLOW_expressionList_in_functionCall1014 = new BitSet(new long[]{0x0000000000400000L});
-    public static final BitSet FOLLOW_22_in_functionCall1016 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_value_in_objectAccess1045 = new BitSet(new long[]{0x0000000001000002L});
-    public static final BitSet FOLLOW_24_in_objectAccess1054 = new BitSet(new long[]{0x0000000000040D10L});
-    public static final BitSet FOLLOW_expression_in_objectAccess1059 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_value_in_unaryExpression1083 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_in_value1109 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FLOAT_in_value1120 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRING_in_value1131 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CHAR_in_value1142 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_value1153 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_expression_in_expressionList1175 = new BitSet(new long[]{0x0000000000800002L});
-    public static final BitSet FOLLOW_23_in_expressionList1185 = new BitSet(new long[]{0x0000000000040D10L});
-    public static final BitSet FOLLOW_expression_in_expressionList1191 = new BitSet(new long[]{0x0000000000800002L});
+    public static final BitSet FOLLOW_21_in_functionCall1011 = new BitSet(new long[]{0x0000000000C40D10L});
+    public static final BitSet FOLLOW_expressionList_in_functionCall1015 = new BitSet(new long[]{0x0000000000400000L});
+    public static final BitSet FOLLOW_22_in_functionCall1017 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_value_in_objectAccess1047 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_24_in_objectAccess1057 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_ID_in_objectAccess1062 = new BitSet(new long[]{0x0000000001000002L});
+    public static final BitSet FOLLOW_value_in_unaryExpression1091 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_in_value1117 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FLOAT_in_value1128 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRING_in_value1139 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CHAR_in_value1150 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_value1161 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expression_in_expressionList1183 = new BitSet(new long[]{0x0000000000800002L});
+    public static final BitSet FOLLOW_23_in_expressionList1193 = new BitSet(new long[]{0x0000000000040D10L});
+    public static final BitSet FOLLOW_expression_in_expressionList1199 = new BitSet(new long[]{0x0000000000800002L});
 
 }

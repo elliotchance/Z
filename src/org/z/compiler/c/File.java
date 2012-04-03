@@ -10,8 +10,9 @@ public class File extends CompileEntity
 	{
 		String fileName = f.getFileName().substring(0, f.getFileName().length() - 4) + "c";
 		CompiledFile self = new CompiledFile(fileName);
+		self.appendContent("#include \"library.h\"\n\n");
 		for(org.z.lexer.grammar.Class cl : f.getClasses())
-			new Class(self, cl);
+			new Class(c, self, cl);
 		c.addCompiledFile(self);
 	}
 	

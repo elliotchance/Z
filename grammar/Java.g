@@ -196,7 +196,7 @@ expression returns [org.z.lexer.grammar.Expression result]
 	;
 		
 functionCall returns [org.z.lexer.grammar.FunctionCall result]
-	:	expr=objectAccess
+	:	expr=objectAccess^
 		{
 			$result = new org.z.lexer.grammar.FunctionCall();
 			$result.setExpression(expr.result);
@@ -207,18 +207,25 @@ functionCall returns [org.z.lexer.grammar.FunctionCall result]
 		})?
 	;
 		
-objectAccess returns [org.z.lexer.grammar.ObjectAccess result]
+objectAccess returns [org.z.lexer.grammar.Expression result]
 	:	{
-			$result = new org.z.lexer.grammar.ObjectAccess();
+			org.z.lexer.grammar.ObjectAccess o = new org.z.lexer.grammar.ObjectAccess();
 		}
-		left=value
+		(left=value^
 		{
-			$result.setLeft(left.result);
+			o.setLeft(left.result);
 		}
-		('.'^ right=expression
+		('.'^ right=ID
 		{
-			$result.setRight(right.result);
-		})?
+			o.addAccessor(new org.z.lexer.grammar.Identifier(right.getText()));
+		})*)
+		{
+			// cancel objectAccess
+			if(o.getAccessors().size() == 0)
+				$result = o.getLeft();
+			else
+				$result = o;
+		}
 	;
 	
 unaryExpression returns [org.z.lexer.grammar.UnaryExpression result]

@@ -7,8 +7,11 @@ public class ExpressionList extends CompileEntity
 	
 	private org.z.lexer.grammar.ExpressionList o;
 	
-	public ExpressionList(org.z.lexer.grammar.ExpressionList o)
+	private org.z.compiler.c.Compiler c;
+	
+	public ExpressionList(org.z.compiler.c.Compiler c, org.z.lexer.grammar.ExpressionList o)
 	{
+		this.c = c;
 		this.o = o;
 	}
 
@@ -22,7 +25,7 @@ public class ExpressionList extends CompileEntity
 				first = false;
 			else
 				r.append(", ");
-			r.append(new Expression(e).render());
+			r.append(new Expression(c, e).render());
 		}
 		return r.toString();
 	}

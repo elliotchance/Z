@@ -1,11 +1,13 @@
 package org.z.lexer.grammar;
 
+import java.util.ArrayList;
+
 public class ObjectAccess implements BinaryExpression
 {
 	
 	private Expression left;
 	
-	private Expression right;
+	private ArrayList<Identifier> accessors = new ArrayList<Identifier>();
 
 	public Expression getLeft()
 	{
@@ -17,22 +19,27 @@ public class ObjectAccess implements BinaryExpression
 		this.left = left;
 	}
 
-	public Expression getRight()
+	public ArrayList<Identifier> getAccessors()
 	{
-		return right;
+		return accessors;
 	}
 
-	public void setRight(Expression right)
+	public void setAccessors(ArrayList<Identifier> accessors)
 	{
-		this.right = right;
+		this.accessors = accessors;
+	}
+	
+	public void addAccessor(Identifier accessor)
+	{
+		accessors.add(accessor);
 	}
 
 	@Override
 	public String toString()
 	{
 		String r = (left == null ? "null" : left.toString());
-		if(right != null)
-			r += "." + (right == null ? "null" : right.toString());
+		for(Identifier accessor : accessors)
+			r += "." + accessor.toString();
 		return r;
 	}
 	

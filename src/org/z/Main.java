@@ -1,6 +1,7 @@
 package org.z;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,8 +12,15 @@ import org.z.compiler.CompiledFile;
 import org.z.lexer.JavaLexer;
 import org.z.lexer.JavaParser;
 import org.z.lexer.grammar.File;
+import org.z.library.Library;
+import org.z.system.ProcessExecuter;
+import org.z.system.ProcessOutput;
+import org.z.system.Resources;
 
-public class Main {
+public class Main
+{
+	
+	private Library library = null;
 
 	/**
 	 * @param args the command line arguments
@@ -20,7 +28,29 @@ public class Main {
 	public static void main(String[] args)
 	{
 		Main m = new Main();
+		m.initLibrary();
 		m.parseFile("test/HelloWorldApp.java");
+	}
+	
+	private void initLibrary()
+	{
+		library = new Library();
+		library.addPackage(
+			new org.z.library.Package("java").addSubpackage(
+				new org.z.library.Package("lang").addClass(
+					new org.z.library.Class("PrintStream").addMethod(
+						new org.z.library.Method("void", "println", "String string")
+					)
+				).addClass(
+					new org.z.library.Class("String")
+				).addClass(
+					new org.z.library.Class("System").addVariable(
+						new org.z.library.Variable("PrintStream", "out")
+					)
+				)
+			)
+		);
+		System.out.println(library + "\n");
 	}
 	
 	private void parseFile(String file)
@@ -52,7 +82,7 @@ public class Main {
 				
 				// compile C
 				{
-					org.z.compiler.Compiler c = new org.z.compiler.c.Compiler();
+					org.z.compiler.Compiler c = new org.z.compiler.c.Compiler(library);
 					c.init("HelloWorldApp");
 					c.addFile(f);
 					ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
@@ -60,7 +90,30 @@ public class Main {
 						System.out.println("=== " + cf.getFileName() + " ===");
 						System.out.println(cf.getContent());
 					}
+					
+					// write files
+					new java.io.File("build/c").mkdir();
+					for(CompiledFile cf : compiledFiles) {
+						java.io.File out = new java.io.File("build/c/" + cf.getFileName());
+						FileOutputStream outStream = new FileOutputStream(out);
+						outStream.write(cf.getContent().getBytes());
+					}
+					
+					// internals
+					Resources.ExtractResource("org/z/compiler/c/resources/library.c", "build/c/library.c");
+					Resources.ExtractResource("org/z/compiler/c/resources/library.h", "build/c/library.h");
 				}
+				
+				// compile
+				ProcessExecuter p = new ProcessExecuter("gcc build/c/library.c build/c/HelloWorldApp.c build/c/main.c -o build/c/a.out");
+				ProcessOutput pout = p.execute();
+				pout.print();
+				
+				// run
+				System.out.println("=== Ouput ===");
+				ProcessExecuter p2 = new ProcessExecuter("build/c/a.out");
+				ProcessOutput pout2 = p2.execute();
+				pout2.print();
 			}
 			catch (RecognitionException e) {
 				e.printStackTrace();

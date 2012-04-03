@@ -16,7 +16,7 @@ public class Value extends CompileEntity
 	public String render() throws CompilerException
 	{
 		if(o.getValue() instanceof String)
-			return "String_new(" + o.getValue().toString() + ")";
+			return "_String_new(" + o.getValue().toString() + ")";
 		return o.getValue().toString();
 	}
 	

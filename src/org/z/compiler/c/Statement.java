@@ -8,8 +8,11 @@ public class Statement extends CompileEntity
 	
 	private org.z.lexer.grammar.Statement s;
 	
-	public Statement(org.z.lexer.grammar.Statement s)
+	private org.z.compiler.c.Compiler c;
+	
+	public Statement(org.z.compiler.c.Compiler c, org.z.lexer.grammar.Statement s)
 	{
+		this.c = c;
 		this.s = s;
 	}
 
@@ -17,7 +20,7 @@ public class Statement extends CompileEntity
 	public String render() throws CompilerException
 	{
 		if(s instanceof org.z.lexer.grammar.SimpleStatement)
-			return new SimpleStatement((org.z.lexer.grammar.SimpleStatement) s).render();
+			return new SimpleStatement(c, (org.z.lexer.grammar.SimpleStatement) s).render();
 		throw new EntityNotSupportedException(s);
 	}
 	
