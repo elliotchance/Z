@@ -18,4 +18,13 @@ public class Resources
 		outStream.write(contents);
 	}
 	
+	public static String FetchResource(String path) throws IOException
+	{
+		ClassLoader classLoader = Resources.class.getClassLoader();
+		InputStream in = classLoader.getResourceAsStream(path);
+		byte[] contents = new byte[in.available()];
+		in.read(contents);
+		return new String(contents);
+	}
+	
 }

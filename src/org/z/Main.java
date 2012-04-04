@@ -29,10 +29,11 @@ public class Main
 	{
 		Main m = new Main();
 		m.initLibrary();
-		m.parseFile("test/HelloWorldApp.java");
+		for(String arg : args)
+			m.parseFile(arg);
 	}
 	
-	private void initLibrary()
+	private Library initLibrary()
 	{
 		library = new Library();
 		library.addPackage(
@@ -50,11 +51,17 @@ public class Main
 				)
 			)
 		);
-		System.out.println(library + "\n");
+		//System.out.println(library + "\n");
+		
+		return library;
 	}
 	
 	private void parseFile(String file)
 	{
+		String inputFile = file.substring(file.lastIndexOf("/") + 1);
+		String rawInputFile = inputFile.substring(0, inputFile.lastIndexOf("."));
+		String base = file.substring(0, file.lastIndexOf("/"));
+		
 		try {
 			//String java = readFileAsString(file);
 			//System.out.println(java);
@@ -66,12 +73,12 @@ public class Main
 			try {
 				// parse
 				File f = g.run().result;
-				f.setFileName("HelloWorldApp.java");
+				f.setFileName(inputFile);
 				
 				// compile Java
 				{
 					org.z.compiler.Compiler c = new org.z.compiler.java.Compiler();
-					c.init("HelloWorldApp");
+					c.init(rawInputFile);
 					c.addFile(f);
 					ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
 					for(CompiledFile cf : compiledFiles) {
@@ -83,7 +90,7 @@ public class Main
 				// compile C
 				{
 					org.z.compiler.Compiler c = new org.z.compiler.c.Compiler(library);
-					c.init("HelloWorldApp");
+					c.init(rawInputFile);
 					c.addFile(f);
 					ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
 					for(CompiledFile cf : compiledFiles) {
@@ -92,26 +99,29 @@ public class Main
 					}
 					
 					// write files
-					new java.io.File("build/c").mkdir();
+					new java.io.File("build/tmp").mkdir();
 					for(CompiledFile cf : compiledFiles) {
-						java.io.File out = new java.io.File("build/c/" + cf.getFileName());
+						java.io.File out = new java.io.File("build/tmp/" + cf.getFileName());
 						FileOutputStream outStream = new FileOutputStream(out);
 						outStream.write(cf.getContent().getBytes());
 					}
 					
 					// internals
-					Resources.ExtractResource("org/z/compiler/c/resources/library.c", "build/c/library.c");
-					Resources.ExtractResource("org/z/compiler/c/resources/library.h", "build/c/library.h");
+					Resources.ExtractResource("org/z/compiler/c/resources/library.c", base + "/library.c");
+					Resources.ExtractResource("org/z/compiler/c/resources/library.h", base + "/library.h");
 				}
 				
 				// compile
-				ProcessExecuter p = new ProcessExecuter("gcc build/c/library.c build/c/HelloWorldApp.c build/c/main.c -o build/c/a.out");
+				String cmd = "gcc " + base + "/library.c " + base + "/" + rawInputFile + ".c " + base + "/main.c -o " +
+					base + "/a.out";
+				System.out.println(cmd);
+				ProcessExecuter p = new ProcessExecuter(cmd);
 				ProcessOutput pout = p.execute();
 				pout.print();
 				
 				// run
 				System.out.println("=== Ouput ===");
-				ProcessExecuter p2 = new ProcessExecuter("build/c/a.out");
+				ProcessExecuter p2 = new ProcessExecuter(base + "/a.out");
 				ProcessOutput pout2 = p2.execute();
 				pout2.print();
 			}
@@ -140,6 +150,13 @@ public class Main
 		}
 		reader.close();
 		return fileData.toString();
+	}
+	
+	public Library getLibrary()
+	{
+		if(library == null)
+			initLibrary();
+		return library;
 	}
 	
 }

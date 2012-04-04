@@ -1,8 +1,8 @@
 /**
- * The HelloWorldApp class implements an application that
+ * The HelloWorld class implements an application that
  * simply prints "Hello World!" to standard output.
  */
-public class HelloWorldApp {
+public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello World!"); // Display the string.
     }

@@ -39,7 +39,7 @@ public class Compiler implements org.z.compiler.Compiler
 	@Override
 	public void init(String entryClass) throws CompilerException
 	{
-		addCompiledFile(new CompiledFile("main.c", "void HelloWorldApp_main(int args);\n\nint main(int argc, char** argv) {\n\t_init();\n\t" + entryClass + "_main(argc);\n\treturn 0;\n}\n"));
+		addCompiledFile(new CompiledFile("main.c", "void " + entryClass + "_main(int args);\n\nint main(int argc, char** argv) {\n\t_init();\n\t" + entryClass + "_main(argc);\n\treturn 0;\n}\n"));
 	}
 	
 	public ResolvedType resolveType(String entity) throws NoSuchEntityException

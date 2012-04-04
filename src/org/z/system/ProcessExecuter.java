@@ -18,18 +18,18 @@ public class ProcessExecuter
 	{
 		StringBuilder stdout = new StringBuilder();
 		StringBuilder stderr = new StringBuilder();
-		String s = null;
+		String s;
 		Process p = Runtime.getRuntime().exec(command);
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
 		// read any errors from the attempted command
 		while((s = stdError.readLine()) != null)
-			stderr.append(s);
+			stderr.append(s + "\n");
 
 		// read the output from the command
 		while ((s = stdInput.readLine()) != null)
-			stdout.append(s);
+			stdout.append(s + "\n");
 		
 		return new ProcessOutput(stdout.toString(), stderr.toString());
 	}
