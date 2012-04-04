@@ -1,6 +1,7 @@
 package org.z.lexer.grammar;
 
 import java.util.ArrayList;
+import org.z.compiler.CompilerException;
 
 public class ObjectAccess implements BinaryExpression
 {
@@ -41,6 +42,12 @@ public class ObjectAccess implements BinaryExpression
 		for(Identifier accessor : accessors)
 			r += "." + accessor.toString();
 		return r;
+	}
+	
+	@Override
+	public Type getDataType() throws CompilerException
+	{
+		throw new CompilerException("Not supported.");
 	}
 	
 }

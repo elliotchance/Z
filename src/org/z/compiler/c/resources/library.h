@@ -13,7 +13,8 @@ typedef struct {
 } String;
 
 typedef struct {
-    void (*println)(String*);
+    void (*println_L)(String*);
+    void (*println_F)(float);
 } PrintStream;
 
 typedef struct {
@@ -27,4 +28,5 @@ System *static_System;
 void _init();
 String* _String_new(char* raw);
 Object* _Object_new(char* className, void* obj);
-void println(String *string);
+void println_L(String *string);
+void println_F(float f);

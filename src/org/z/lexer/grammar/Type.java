@@ -6,6 +6,16 @@ public class Type
 	private String base;
 	
 	private int depth = 0;
+	
+	public Type()
+	{
+		this.base = null;
+	}
+	
+	public Type(String base)
+	{
+		this.base = base;
+	}
 
 	public String getBase()
 	{
@@ -34,6 +44,13 @@ public class Type
 		for(int i = 0; i < depth; ++i)
 			r += "[]";
 		return r;
+	}
+	
+	public String getSignature()
+	{
+		if(toString().equals("float"))
+			return "F";
+		return "L"; // + toString() + ";";
 	}
 	
 }

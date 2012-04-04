@@ -1,5 +1,8 @@
 package org.z.lexer.grammar;
 
+import java.util.Arrays;
+import org.z.compiler.CompilerException;
+
 public class FunctionCall implements Expression
 {
 	
@@ -34,6 +37,16 @@ public class FunctionCall implements Expression
 		if(arguments != null)
 			r += "(" + arguments.toString() + ")";
 		return r;
+	}
+	
+	@Override
+	public Type getDataType() throws CompilerException
+	{
+		if(arguments == null)
+			return expression.getDataType();
+		
+		System.out.println(Arrays.toString(arguments.getDataTypes()));
+		throw new CompilerException("Not supported.");
 	}
 	
 }

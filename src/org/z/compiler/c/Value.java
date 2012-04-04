@@ -19,5 +19,11 @@ public class Value extends CompileEntity
 			return "_String_new(" + o.getValue().toString() + ")";
 		return o.getValue().toString();
 	}
+
+	@Override
+	public String toString()
+	{
+		return o.toString();
+	}
 	
 }

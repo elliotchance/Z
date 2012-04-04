@@ -1,5 +1,7 @@
 package org.z.lexer.grammar;
 
+import org.z.compiler.CompilerException;
+
 public class Identifier implements Expression
 {
 	
@@ -14,6 +16,12 @@ public class Identifier implements Expression
 	public String toString()
 	{
 		return identifier;
+	}
+	
+	@Override
+	public Type getDataType() throws CompilerException
+	{
+		throw new CompilerException("Not supported.");
 	}
 	
 }

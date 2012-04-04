@@ -65,6 +65,10 @@ public class TestInOut
 		// compile it
 		ProcessExecuter p = new ProcessExecuter("java -jar " + distJar + " " + inputFile);
 		ProcessOutput po = p.execute();
+		if(!po.getStderr().trim().equals("")) {
+			System.err.println(po.getStderr().trim());
+			throw new Exception(po.getStderr().trim());
+		}
 		
 		// run it
 		ProcessExecuter p2 = new ProcessExecuter("build/tmp/a.out");
