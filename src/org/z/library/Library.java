@@ -42,4 +42,21 @@ public class Library
 		throw new NoSuchEntityException(name + " (package)");
 	}
 	
+	public boolean classExists(String name)
+	{
+		try {
+			String[] parts = name.split(".");
+			Package p = getPackage(parts[0]);
+			for(int i = 1; i < parts.length; ++i)
+				p = p.getSubpackage(parts[i]);
+			return true;
+		}
+		catch(ArrayIndexOutOfBoundsException e) {
+			return false;
+		}
+		catch(NoSuchEntityException e) {
+			return false;
+		}
+	}
+	
 }

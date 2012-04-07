@@ -1,35 +1,25 @@
 package org.z.test;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
 import org.z.system.ProcessExecuter;
 import org.z.system.ProcessOutput;
 import org.z.system.Resources;
-import org.junit.*;
 import static org.junit.Assert.*;
 import org.z.Main;
 import org.z.compiler.CompiledFile;
 import org.z.lexer.JavaLexer;
 import org.z.lexer.JavaParser;
-import org.z.library.Library;
 
 public class TestInOut
 {
 	
-	private static Library library = null;
-	
-	static {
-		library = new Main().getLibrary();
-	}
-	
 	public void run(String name) throws Exception
 	{
 		// prepare
+		Main m = new Main();
 		new File("build/tmp").mkdir();
 		String inputFile = "build/tmp/" + name + ".java";
 		String distJar = "dist/Z.jar";
@@ -56,7 +46,7 @@ public class TestInOut
 
 		// compile C
 		{
-			org.z.compiler.Compiler c = new org.z.compiler.c.Compiler(library);
+			org.z.compiler.Compiler c = new org.z.compiler.c.Compiler(m);
 			c.init(name);
 			c.addFile(f);
 			ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();

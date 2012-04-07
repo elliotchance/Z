@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import org.z.compiler.CompilerException;
 
-public class Identifier implements Expression
+public class Identifier implements Expression, Renderable
 {
 	
 	private String identifier;

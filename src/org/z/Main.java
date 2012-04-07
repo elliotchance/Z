@@ -20,7 +20,7 @@ import org.z.system.Resources;
 public class Main
 {
 	
-	private Library library = null;
+	private Library library = new Library();
 
 	/**
 	 * @param args the command line arguments
@@ -28,35 +28,11 @@ public class Main
 	public static void main(String[] args)
 	{
 		Main m = new Main();
-		m.initLibrary();
 		for(String arg : args)
 			m.parseFile(arg);
 	}
 	
-	private Library initLibrary()
-	{
-		library = new Library();
-		library.addPackage(
-			new org.z.library.Package("java").addSubpackage(
-				new org.z.library.Package("lang").addClass(
-					new org.z.library.Class("PrintStream").addMethod(
-						new org.z.library.Method("void", "println", "String string")
-					)
-				).addClass(
-					new org.z.library.Class("String")
-				).addClass(
-					new org.z.library.Class("System").addVariable(
-						new org.z.library.Variable("PrintStream", "out")
-					)
-				)
-			)
-		);
-		//System.out.println(library + "\n");
-		
-		return library;
-	}
-	
-	private void parseFile(String file)
+	public void parseFile(String file)
 	{
 		String inputFile = file.substring(file.lastIndexOf("/") + 1);
 		String rawInputFile = inputFile.substring(0, inputFile.lastIndexOf("."));
@@ -89,7 +65,7 @@ public class Main
 				
 				// compile C
 				{
-					org.z.compiler.Compiler c = new org.z.compiler.c.Compiler(library);
+					org.z.compiler.Compiler c = new org.z.compiler.c.Compiler(this);
 					c.init(rawInputFile);
 					c.addFile(f);
 					ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
@@ -154,8 +130,6 @@ public class Main
 	
 	public Library getLibrary()
 	{
-		if(library == null)
-			initLibrary();
 		return library;
 	}
 	

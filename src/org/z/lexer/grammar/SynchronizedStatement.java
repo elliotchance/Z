@@ -1,9 +1,11 @@
 package org.z.lexer.grammar;
 
-public class SimpleStatement implements Statement, Renderable
+public class SynchronizedStatement implements Statement, Renderable
 {
 	
 	private Expression expression;
+	
+	private Block block;
 
 	public Expression getExpression()
 	{
@@ -15,10 +17,14 @@ public class SimpleStatement implements Statement, Renderable
 		this.expression = expression;
 	}
 
-	@Override
-	public String toString()
+	public Block getBlock()
 	{
-		return expression.toString();
+		return block;
+	}
+
+	public void setBlock(Block block)
+	{
+		this.block = block;
 	}
 	
 }

@@ -1,11 +1,13 @@
 package org.z.lexer.grammar;
 
-public class Argument
+public class Argument implements Renderable
 {
 	
 	private Type type;
 	
 	private String name;
+	
+	private boolean isFinal;
 
 	public String getName()
 	{
@@ -30,7 +32,17 @@ public class Argument
 	@Override
 	public String toString()
 	{
-		return type.toString() + " " + name;
+		return (isFinal ? "final " : "") + type.toString() + " " + name;
+	}
+
+	public boolean isIsFinal()
+	{
+		return isFinal;
+	}
+
+	public void setIsFinal(boolean isFinal)
+	{
+		this.isFinal = isFinal;
 	}
 	
 }

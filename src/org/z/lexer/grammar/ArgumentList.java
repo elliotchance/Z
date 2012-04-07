@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class ArgumentList extends ArrayList<Argument>
+public class ArgumentList extends ArrayList<Argument> implements Renderable
 {
 
 	@Override

@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import org.z.compiler.CompilerException;
 
-public class Value implements UnaryExpression
+public class Value implements UnaryExpression, Renderable
 {
 	
 	private Object value;

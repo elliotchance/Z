@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class Type
+public class Type implements Renderable
 {
 	
 	private String base;

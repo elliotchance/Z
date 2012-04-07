@@ -8,18 +8,18 @@ public class SimpleStatement extends CompileEntity
 	
 	private org.z.lexer.grammar.SimpleStatement s;
 	
-	private org.z.compiler.c.Compiler c;
+	private org.z.compiler.c.File f;
 	
-	public SimpleStatement(org.z.compiler.c.Compiler c, org.z.lexer.grammar.SimpleStatement s)
+	public SimpleStatement(org.z.compiler.c.File f, org.z.lexer.grammar.SimpleStatement s)
 	{
-		this.c = c;
+		this.f = f;
 		this.s = s;
 	}
 
 	@Override
 	public String render() throws CompilerException
 	{
-		return new Expression(c, s.getExpression()).render();
+		return new Expression(f, s.getExpression()).render();
 	}
 	
 }

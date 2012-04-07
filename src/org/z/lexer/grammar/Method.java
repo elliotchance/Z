@@ -1,19 +1,36 @@
 package org.z.lexer.grammar;
 
-public class Method
+import java.util.ArrayList;
+
+public class Method implements Renderable
 {
 	
 	private String name;
 	
 	private boolean isStatic = false;
 	
+	private boolean isFinal = false;
+	
+	private boolean isNative = false;
+	
+	private boolean isSynchronized = false;
+	
 	private String permission = null;
 	
 	private Type returnType = null;
 	
-	private StatementList statements = null;
+	private Block block = null;
 	
 	private ArgumentList arguments = null;
+	
+	private boolean hasBody = false;
+	
+	private ArrayList<String> throwList = new ArrayList<String>();
+	
+	public void addThrows(String throwClass)
+	{
+		throwList.add(throwClass);
+	}
 
 	public ArgumentList getArguments()
 	{
@@ -25,14 +42,14 @@ public class Method
 		this.arguments = arguments;
 	}
 
-	public StatementList getStatements()
+	public Block getBlock()
 	{
-		return statements;
+		return block;
 	}
 
-	public void setStatements(StatementList statements)
+	public void setBlock(Block block)
 	{
-		this.statements = statements;
+		this.block = block;
 	}
 
 	public Type getReturnType()
@@ -83,17 +100,81 @@ public class Method
 			r.append(permission);
 			r.append(" ");
 		}
+		
 		if(isStatic)
 			r.append("static ");
+		if(isFinal)
+			r.append("final ");
+		if(isNative)
+			r.append("native ");
+		
 		r.append(returnType.toString());
 		r.append(" ");
 		r.append(name);
 		r.append("(");
 		r.append(arguments.toString());
-		r.append(") {\n");
-		r.append(statements.toString());
-		r.append("\t}");
+		r.append(")");
+		
+		if(!throwList.isEmpty()) {
+			r.append(" throws ");
+			boolean first = true;
+			for(String th : throwList) {
+				if(first)
+					first = false;
+				else
+					r.append(", ");
+				r.append(th);
+			}
+		}
+		
+		if(hasBody) {
+			r.append(" {\n");
+			r.append(block.toString());
+			r.append("\t}");
+		}
+		else
+			r.append(";");
 		return r.toString();
+	}
+
+	public boolean isFinal()
+	{
+		return isFinal;
+	}
+
+	public void setIsFinal(boolean isFinal)
+	{
+		this.isFinal = isFinal;
+	}
+
+	public boolean isNative()
+	{
+		return isNative;
+	}
+
+	public void setIsNative(boolean isNative)
+	{
+		this.isNative = isNative;
+	}
+
+	public boolean hasBody()
+	{
+		return hasBody;
+	}
+
+	public void setHasBody(boolean hasBody)
+	{
+		this.hasBody = hasBody;
+	}
+
+	public boolean isSynchronized()
+	{
+		return isSynchronized;
+	}
+
+	public void setIsSynchronized(boolean isSynchronized)
+	{
+		this.isSynchronized = isSynchronized;
 	}
 	
 }

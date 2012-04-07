@@ -3,7 +3,7 @@ package org.z.lexer.grammar;
 import java.util.Arrays;
 import org.z.compiler.CompilerException;
 
-public class FunctionCall implements Expression
+public class FunctionCall implements Expression, Renderable
 {
 	
 	private Expression expression;

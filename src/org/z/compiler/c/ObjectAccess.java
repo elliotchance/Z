@@ -1,31 +1,33 @@
 package org.z.compiler.c;
 
 import org.z.compiler.CompilerException;
-import org.z.lexer.grammar.Identifier;
+import org.z.lexer.grammar.Right;
 
 public class ObjectAccess extends CompileEntity
 {
 	
 	private org.z.lexer.grammar.ObjectAccess o;
 	
-	private org.z.compiler.c.Compiler c;
+	private org.z.compiler.c.File f;
 	
-	public ObjectAccess(org.z.compiler.c.Compiler c, org.z.lexer.grammar.ObjectAccess o)
+	public ObjectAccess(org.z.compiler.c.File f, org.z.lexer.grammar.ObjectAccess o)
 	{
-		this.c = c;
+		this.f = f;
 		this.o = o;
 	}
 
 	@Override
 	public String render() throws CompilerException
 	{
-		//System.out.println(o.getLeft().getClass());
-		ResolvedType leftType = c.resolveType(o.getLeft().toString());
-		String r = "";
+		if(o.getRight().isEmpty())
+			return new Expression(f, o.getLeft()).render();
+		
+		ResolvedType leftType = f.resolveType(o.getLeft().toString());
+		String r;
 		if(leftType.getType().equals("class")) {
 			r = leftType.getCode();
-			for(Identifier v : o.getAccessors())
-				r += "->" + v.toString();
+			for(Right singleRight : o.getRight())
+				r += "->" + new Expression(f, singleRight.getExpression()).render();
 			return r;
 		}
 		else

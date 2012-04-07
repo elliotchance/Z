@@ -1,15 +1,17 @@
 package org.z.lexer.grammar;
 
-public class SimpleStatement implements Statement, Renderable
+public class ReturnStatement extends SimpleStatement implements Renderable
 {
 	
 	private Expression expression;
 
+	@Override
 	public Expression getExpression()
 	{
 		return expression;
 	}
 
+	@Override
 	public void setExpression(Expression expression)
 	{
 		this.expression = expression;

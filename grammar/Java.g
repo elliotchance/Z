@@ -1,11 +1,25 @@
 grammar Java;
 
 tokens {
+	K_CATCH = 'catch';
 	K_CLASS = 'class';
+	K_FINAL = 'final';
+	K_FINALLY = 'finally';
+	K_IF = 'if';
+	K_IMPORT = 'import';
+	K_NATIVE = 'native';
+	K_NULL = 'null';
+	K_PACKAGE = 'package';
 	K_PUBLIC = 'public';
 	K_PRIVATE = 'private';
 	K_PROTECTED = 'protected';
+	K_RETURN = 'return';
 	K_STATIC = 'static';
+	K_SYNCHRONIZED = 'synchronized';
+	K_THROW = 'throw';
+	K_THROWS = 'throws';
+	K_TRY = 'try';
+	K_VOLATILE = 'volatile';
 }
 
 @parser::header {
@@ -84,28 +98,130 @@ run returns [org.z.lexer.grammar.File result]
 	:	{
 			$result = new org.z.lexer.grammar.File();
 		}
-		(def=classDefinition {
-			$result.addClass(def.result);
-		})*
+		(
+			(thePackageName=packageDefinition {
+				$result.setPackageName(thePackageName.result);
+			})?
+			(theImportName=importDefinition {
+				$result.addImport(theImportName.result);
+			})*
+			(def=classDefinition {
+				$result.addClass(def.result);
+			})*
+		)
 		EOF
+	;
+	
+packageName
+	:	ID ('.' ID)*
+	;
+		
+className
+	:	ID ('.' ID)*
+	;
+	
+importName
+	:	ID ('.' (ID | '*'))*
+	;
+	
+packageDefinition returns [String result]
+	:	K_PACKAGE thePackageName=packageName ';'
+		{
+			$result = thePackageName.toString();
+		}
+	; 
+		
+importDefinition returns [String result]
+	:	K_IMPORT theImportName=importName ';'
+		{
+			$result = theImportName.toString();
+		}
+	;
+	
+instanceVariable returns [org.z.lexer.grammar.InstanceVariable result]
+	:	{
+			$result = new org.z.lexer.grammar.InstanceVariable();
+		}
+		(
+			(thePermission=permission {
+				$result.setPermission(thePermission.toString());
+			})
+			|
+			(K_STATIC {
+				$result.setIsStatic(true);
+			})
+			|
+			(K_FINAL {
+				$result.setIsFinal(true);
+			})
+			|
+			(K_VOLATILE {
+				$result.setIsVolatile(true);
+			})
+		)*
+		(theType=type {
+			$result.setType(theType.result);
+		})
+		(variableName=ID
+		{
+			$result.setName(variableName.getText());
+		})
+		(
+			(
+				'=' stmt=simpleStatement
+				{
+					$result.setStatement(stmt.result);
+				}
+			)
+		)
+		';'
 	;
     
 classDefinition returns [org.z.lexer.grammar.Class result]
-	:	isPublic=K_PUBLIC? K_CLASS className=ID '{'
-		{
+	:	{
 			$result = new org.z.lexer.grammar.Class();
-			$result.setName(className.getText());
-			$result.setIsPublic(isPublic != null);
 		}
-		(m=method {
-			$result.addMethod(m.result);
-		})*
-		'}'
-		EOF
+		(
+			(K_PUBLIC {
+				$result.setIsPublic(true);
+			})
+			|
+			(K_FINAL {
+				$result.setIsFinal(true);
+			})
+		)*
+		K_CLASS
+		(theClassName=ID {
+			$result.setName(theClassName.getText());
+		})
+		'{'
+		(
+			(var=instanceVariable {
+				$result.addInstanceVariable(var.result);
+			})
+			|
+			(m=method {
+				$result.addMethod(m.result);
+			})
+			|
+			// static block
+			('static' stmts=block {
+				$result.setStaticBlock(stmts.result);
+			})
+		)*
+		'}' EOF
 	;
 		
-permission
-	:	K_PUBLIC | K_PROTECTED | K_PRIVATE
+permission returns [String result]
+	:	K_PUBLIC {
+			$result = "public";
+		}
+	|	K_PROTECTED {
+			$result = "protected";
+		}
+	|	K_PRIVATE {
+			$result = "private";
+		}
 	;
 		
 type returns [org.z.lexer.grammar.Type result]
@@ -120,32 +236,68 @@ type returns [org.z.lexer.grammar.Type result]
 	;
 	
 method returns [org.z.lexer.grammar.Method result]
-	:	thePermission=(permission?) isStatic=K_STATIC? returnType=type name=ID
-		'(' args=argumentList ')'
-		'{'
-		stmts=statementList
-		'}'
-		{
+	:	{
 			$result = new org.z.lexer.grammar.Method();
-			if(thePermission != null)
-				$result.setPermission(thePermission.getText());
-			$result.setIsStatic(isStatic != null);
-			$result.setReturnType(returnType.result);
-			$result.setName(name.getText());
-			$result.setArguments(args.result);
-			if(stmts != null)
-				$result.setStatements(stmts.result);
 		}
+		(
+			(thePermission=permission {
+				$result.setPermission(thePermission.result);
+			})
+			|
+			(K_STATIC {
+				$result.setIsStatic(true);
+			})
+			|
+			(K_SYNCHRONIZED {
+				$result.setIsSynchronized(true);
+			})
+			|
+			(K_FINAL {
+				$result.setIsFinal(true);
+			})
+			|
+			(K_NATIVE {
+				$result.setIsNative(true);
+			})
+		)*
+		(returnType=type {
+			$result.setReturnType(returnType.result);
+		})?
+		name=ID {
+			$result.setName(name.getText());
+		}
+		('(' args=argumentList ')' {
+			$result.setArguments(args.result);
+		})
+		(
+			K_THROWS
+			(
+				(cn=className ','?) {
+					$result.addThrows(cn.toString());
+				}
+			)*
+		)?
+		(
+			(stmts=block {
+				$result.setBlock(stmts.result);
+				$result.setHasBody(true);
+			})
+			|
+			(';' {
+				$result.setHasBody(false);
+			})
+		)
 	;
 	
-statementList returns [org.z.lexer.grammar.StatementList result]
+block returns [org.z.lexer.grammar.Block result]
 	:	{
-			$result = new org.z.lexer.grammar.StatementList();
+			$result = new org.z.lexer.grammar.Block();
 		}
-		(stmt=statement
-		{
+		('{'
+		(stmt=statement {
 			$result.add(stmt.result);
 		})*
+		'}')
 	;
 	
 argumentList returns [org.z.lexer.grammar.ArgumentList result]
@@ -164,39 +316,186 @@ argumentList returns [org.z.lexer.grammar.ArgumentList result]
 	;
 	
 argument returns [org.z.lexer.grammar.Argument result]
-	:	theType=type name=ID
-		{
+	:	{
 			$result = new org.z.lexer.grammar.Argument();
+		}
+		(K_FINAL {
+			$result.setIsFinal(true);
+		})?
+		theType=type {
 			$result.setType(theType.result);
+		}
+		name=ID
+		{
 			$result.setName(name.getText());
 		}
 	;
 	
 statement returns [org.z.lexer.grammar.Statement result]
-	:	stmt=simpleStatement
+	:	(stmt1=singleStatement {
+			$result = stmt1.result;
+		})
+		|
+		(stmt2=complexStatement {
+			$result = stmt2.result;
+		})
+	;
+	
+complexStatement returns [org.z.lexer.grammar.ComplexStatement result]
+	:	synchronizedStatement
+	|	ifStatement
+	|	exceptionStatement
+	;
+
+synchronizedStatement returns [org.z.lexer.grammar.SynchronizedStatement result]
+	:	{
+			$result = new org.z.lexer.grammar.SynchronizedStatement();
+		}
+		K_SYNCHRONIZED
+		'('
+		expr=expression {
+			$result.setExpression(expr.result);
+		}
+		')'
+		stmts=block
 		{
-			$result = stmt.result;
+			$result.setBlock(stmts.result);
 		}
 	;
 
-simpleStatement returns [org.z.lexer.grammar.SimpleStatement result]
-	:	expr=expression
-		{
-			$result = new org.z.lexer.grammar.SimpleStatement();
-			$result.setExpression(expr.result);
+exceptionStatement returns [org.z.lexer.grammar.ExceptionStatement result]
+	:	{
+			$result = new org.z.lexer.grammar.ExceptionStatement();
 		}
+		tryStmt=tryBlock {
+			$result.setTryBlock(tryStmt.result);
+		}
+		(catchStmt=catchBlock {
+			$result.addCatchBlock(catchStmt.result);
+		})+
+		(finallyStmt=finallyBlock {
+			$result.setFinallyBlock(finallyStmt.result);
+		})?
+	;
+	
+tryBlock returns [org.z.lexer.grammar.TryBlock result]
+	:	{
+			$result = new org.z.lexer.grammar.TryBlock();
+		}
+		K_TRY
+		tryStmt=block {
+			$result = (org.z.lexer.grammar.TryBlock) tryStmt.result;
+		}
+	;
+	
+catchBlock returns [org.z.lexer.grammar.CatchBlock result]
+	:	{
+			$result = new org.z.lexer.grammar.CatchBlock();
+		}
+		K_CATCH
+		catchStmt=block {
+			$result = (org.z.lexer.grammar.CatchBlock) catchStmt.result;
+		}
+	;
+	
+finallyBlock returns [org.z.lexer.grammar.FinallyBlock result]
+	:	{
+			$result = new org.z.lexer.grammar.FinallyBlock();
+		}
+		K_FINALLY
+		finallyStmt=block {
+			$result = (org.z.lexer.grammar.FinallyBlock) finallyStmt.result;
+		}
+	;
+	
+ifStatement returns [org.z.lexer.grammar.IfStatement result]
+	:	{
+			$result = new org.z.lexer.grammar.IfStatement();
+		}
+		(K_IF '('
+		theExpression=expression {
+			$result.setCondition(theExpression.result);
+		}
+		')')
+		{
+			org.z.lexer.grammar.Block block = new org.z.lexer.grammar.Block();
+		}
+		(
+			(singleStmt=statement {
+				block.add(singleStmt.result);
+			})
+			|
+			(theBlock=block {
+				block = theBlock.result;
+			})
+		)
+		{
+			$result.setBlock(block);
+		}
+	;
+	
+singleStatement returns [org.z.lexer.grammar.SimpleStatement result]
+	:	(
+			(returnStmt=returnStatement {
+				$result = returnStmt.result;
+			})
+			|
+			(simpleStmt=simpleStatement {
+				$result = simpleStmt.result;
+			})
+		)
 		';'
 	;
 
-expression returns [org.z.lexer.grammar.Expression result]
-	:	expr=functionCall
-		{
-			$result = expr.result;
+simpleStatement returns [org.z.lexer.grammar.SimpleStatement result]
+	:	expr2=expression {
+			$result = new org.z.lexer.grammar.SimpleStatement();
+			$result.setExpression(expr2.result);
 		}
+	;
+	
+returnStatement returns [org.z.lexer.grammar.ReturnStatement result]
+	:	K_RETURN
+		expr=expression {
+			$result = new org.z.lexer.grammar.ReturnStatement();
+			$result.setExpression(expr.result);
+		}
+	;
+ 
+expression returns [org.z.lexer.grammar.Expression result]
+	:	(
+			(K_NULL {
+				$result = new org.z.lexer.grammar.NullExpression();
+			})
+			|
+			(expr=objectAccess {
+				$result = expr.result;
+			})
+		)
+	;
+			
+objectAccess returns [org.z.lexer.grammar.ObjectAccess result]
+	:	{
+			$result = new org.z.lexer.grammar.ObjectAccess();
+		}
+		(
+			left=functionCall {
+				$result.setLeft(left.result);
+			}
+			('.'^ (
+				K_CLASS {
+					$result.addRight(new org.z.lexer.grammar.Right(".", new org.z.lexer.grammar.Identifier("class")));
+				}
+				|
+				right=functionCall {
+					$result.addRight(new org.z.lexer.grammar.Right(".", right.result));
+				})
+			)*
+		)
 	;
 		
 functionCall returns [org.z.lexer.grammar.FunctionCall result]
-	:	expr=objectAccess^
+	:	expr=comparisonExpression
 		{
 			$result = new org.z.lexer.grammar.FunctionCall();
 			$result.setExpression(expr.result);
@@ -206,31 +505,45 @@ functionCall returns [org.z.lexer.grammar.FunctionCall result]
 			$result.setArguments(args.result);
 		})?
 	;
-		
-objectAccess returns [org.z.lexer.grammar.Expression result]
-	:	{
-			org.z.lexer.grammar.ObjectAccess o = new org.z.lexer.grammar.ObjectAccess();
+	
+comparisonOperator
+	:	('==' | '!=')
+	;
+	
+comparisonExpression returns [org.z.lexer.grammar.ComparisonExpression result]
+	:	expr1=assignmentExpression {
+			$result = new org.z.lexer.grammar.ComparisonExpression();
+			$result.setLeft(expr1.result);
 		}
-		(left=value^
-		{
-			o.setLeft(left.result);
+		(
+			(
+				op=comparisonOperator^ expr2=expression {
+					$result.addRight(new org.z.lexer.grammar.Right(op.toString(), expr2.result));
+				}
+			)*
+		)
+	;
+
+assignmentOperator
+	:	('=' | '+=' | '-=' | '*=' | '/=')
+	;
+
+assignmentExpression returns [org.z.lexer.grammar.AssignmentExpression result]
+	:	expr1=unaryExpression {
+			$result = new org.z.lexer.grammar.AssignmentExpression();
+			$result.setLeft(expr1.result);
 		}
-		('.'^ right=ID
-		{
-			o.addAccessor(new org.z.lexer.grammar.Identifier(right.getText()));
-		})*)
-		{
-			// cancel objectAccess
-			if(o.getAccessors().size() == 0)
-				$result = o.getLeft();
-			else
-				$result = o;
-		}
+		(
+			(
+				op=assignmentOperator^ expr2=expression {
+					$result.addRight(new org.z.lexer.grammar.Right(op.toString(), expr2.result));
+				}
+			)*
+		)
 	;
 	
 unaryExpression returns [org.z.lexer.grammar.UnaryExpression result]
-	:	expr=value
-		{
+	:	expr=value {
 			$result = expr.result;
 		}
 	;
@@ -239,8 +552,7 @@ value returns [org.z.lexer.grammar.Value result]
 	:	{
 			$result = new org.z.lexer.grammar.Value();
 		}
-		(x1=INT
-		{
+		(x1=INT {
 			$result.setValue(Integer.valueOf(x1.getText()));
 		}
 	|	x2=FLOAT

@@ -32,5 +32,11 @@ public class ResolvedType
 	{
 		this.type = type;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "ResolvedType{" + "type=" + type + ", code=" + code + '}';
+	}
 	
 }
