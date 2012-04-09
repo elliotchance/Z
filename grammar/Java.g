@@ -26,6 +26,10 @@ tokens {
 	package org.z.lexer;
 }
 
+@parser::members {
+	private String activePackageName = null;
+}
+
 @lexer::header {
 	package org.z.lexer;
 }
@@ -60,14 +64,6 @@ STRING
 
 CHAR:  '\'' ( ESC_SEQ | ~('\''|'\\') ) '\''
     ;
-    
-/*VALUE
-	:	INT
-	| 	FLOAT
-	|	STRING
-	|	CHAR
-	;
-*/
 
 fragment
 EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
@@ -93,6 +89,29 @@ fragment
 UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
     ;
+       
+fullName returns [java.lang.String result]
+	:	x=ID {
+			$result = x.getText();
+		}
+		(('.' x=ID) {
+			$result += "." + x.getText();
+		})*
+	;
+	
+importName returns [java.lang.String result]
+	:	x=ID  {
+			$result = x.getText();
+		} 
+		(
+			'.' { $result += "."; }
+			(
+				(x=ID { $result += x.getText(); })
+				|
+				(x='*' { $result += x.getText(); })
+			)
+		)*
+	;
     
 run returns [org.z.lexer.grammar.File result]
 	:	{
@@ -101,41 +120,34 @@ run returns [org.z.lexer.grammar.File result]
 		(
 			(thePackageName=packageDefinition {
 				$result.setPackageName(thePackageName.result);
-			})?
+				activePackageName = thePackageName.result;
+			})
+			|
 			(theImportName=importDefinition {
 				$result.addImport(theImportName.result);
-			})*
+			})
+			|
 			(def=classDefinition {
 				$result.addClass(def.result);
-			})*
-		)
-		EOF
-	;
-	
-packageName
-	:	ID ('.' ID)*
-	;
-		
-className
-	:	ID ('.' ID)*
-	;
-	
-importName
-	:	ID ('.' (ID | '*'))*
+			})
+		)*
 	;
 	
 packageDefinition returns [String result]
-	:	K_PACKAGE thePackageName=packageName ';'
-		{
-			$result = thePackageName.toString();
+	:	K_PACKAGE
+		thePackageName=fullName {
+			$result = thePackageName.result;
 		}
+		';'
 	; 
 		
 importDefinition returns [String result]
-	:	K_IMPORT theImportName=importName ';'
+	:	K_IMPORT
+		theImportName=importName
 		{
-			$result = theImportName.toString();
+			$result = theImportName.result;
 		}
+		';'
 	;
 	
 instanceVariable returns [org.z.lexer.grammar.InstanceVariable result]
@@ -192,7 +204,10 @@ classDefinition returns [org.z.lexer.grammar.Class result]
 		)*
 		K_CLASS
 		(theClassName=ID {
-			$result.setName(theClassName.getText());
+			if(activePackageName != null)
+				$result.setName(activePackageName + "." + theClassName.getText());
+			else
+				$result.setName(theClassName.getText());
 		})
 		'{'
 		(
@@ -209,7 +224,7 @@ classDefinition returns [org.z.lexer.grammar.Class result]
 				$result.setStaticBlock(stmts.result);
 			})
 		)*
-		'}' EOF
+		'}'
 	;
 		
 permission returns [String result]
@@ -272,8 +287,8 @@ method returns [org.z.lexer.grammar.Method result]
 		(
 			K_THROWS
 			(
-				(cn=className ','?) {
-					$result.addThrows(cn.toString());
+				(cn=fullName ','?) {
+					$result.addThrows(cn.result);
 				}
 			)*
 		)?

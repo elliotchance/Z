@@ -39,12 +39,24 @@ public class Compiler implements org.z.compiler.Compiler
 	@Override
 	public void init(String entryClass) throws CompilerException
 	{
-		addCompiledFile(new CompiledFile("main.c", "void " + entryClass + "_main(int args);\n\nint main(int argc, char** argv) {\n\t_init();\n\t" + entryClass + "_main(argc);\n\treturn 0;\n}\n"));
+		StringBuilder sb = new StringBuilder();
+		sb.append(("#include \"" + entryClass.replace('.', '_') + ".h\"\n\n"));
+		sb.append("int main(int argc, char** argv) {\n");
+		sb.append("\t_init();\n");
+		sb.append(("\t" + entryClass.replace('.', '_') + "_main(0);\n"));
+		sb.append("\treturn 0;\n");
+		sb.append("}\n");
+		addCompiledFile(new CompiledFile("main.c", sb.toString()));
 	}
 	
 	public Main getMain()
 	{
 		return main;
+	}
+	
+	public Library getLibrary()
+	{
+		return main.getLibrary();
 	}
 	
 }

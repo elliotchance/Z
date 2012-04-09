@@ -5,25 +5,31 @@ import java.util.ArrayList;
 public class Class
 {
 	
-	private String name;
+	private String fullName;
 	
 	private ArrayList<Variable> variables = new ArrayList<Variable>();
 	
 	private ArrayList<Method> methods = new ArrayList<Method>();
 	
-	public Class(String name)
+	public Class(String fullName)
 	{
-		this.name = name;
+		this.fullName = fullName;
+	}
+
+	public String getFullName()
+	{
+		return fullName;
+	}
+
+	public void setFullName(String fullName)
+	{
+		this.fullName = fullName;
 	}
 
 	public String getName()
 	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
+		String[] parts = fullName.split(".");
+		return parts[parts.length - 1];
 	}
 
 	@Override
@@ -34,7 +40,7 @@ public class Class
 	
 	public String toString(int indent)
 	{
-		String r = Library.getIndent(indent) + name;
+		String r = Library.getIndent(indent) + getName();
 		for(Variable v : variables)
 			r += "\n" + Library.getIndent(indent + 1) + v.toString();
 		for(Method m : methods)

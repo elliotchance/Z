@@ -13,12 +13,23 @@ public class File extends CompileEntity
 	public File(org.z.compiler.c.Compiler c, org.z.lexer.grammar.File f) throws CompilerException
 	{
 		this.c = c;
-		String fileName = f.getFileName().substring(0, f.getFileName().length() - 4) + "c";
-		CompiledFile self = new CompiledFile(fileName);
-		self.appendContent("#include \"library.h\"\n\n");
-		for(org.z.lexer.grammar.Class cl : f.getClasses())
+		
+		for(org.z.lexer.grammar.Class cl : f.getClasses()) {
+			// generate header file
+			//System.err.println(c.getOutputFolder() + "/" + cl.getFullName().replace('.', '_') + ".h");
+			CompiledFile headerFile = new CompiledFile(cl.getFullName().replace('.', '_') + ".h");
+			cl.setName(cl.getFullName());
+			new HeaderClass(this, headerFile, cl);
+			c.addCompiledFile(headerFile);
+			
+			// generate c file
+			//System.err.println(c.getOutputFolder() + "/" + cl.getFullName().replace('.', '_') + ".c");
+			CompiledFile self = new CompiledFile(cl.getFullName().replace('.', '_') + ".c");
+			self.appendContent("#include \"" + cl.getFullName().replace('.', '_') + ".h\"\n\n");
+			cl.setName(cl.getFullName());
 			new Class(this, self, cl);
-		c.addCompiledFile(self);
+			c.addCompiledFile(self);
+		}
 	}
 	
 	public void addImport(String path)
@@ -29,7 +40,12 @@ public class File extends CompileEntity
 		
 		String libpath = "library/" + path.replace('.', '/') + ".java";
 		System.out.println("Add import: " + path + " -> " + libpath);
-		c.getMain().parseFile(libpath);
+		try {
+			c.getMain().parseFile(c, libpath);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public ResolvedType resolveType(String entity) throws NoSuchEntityException
@@ -42,6 +58,11 @@ public class File extends CompileEntity
 				return new ResolvedType("class", "static_" + c.getName());
 		}*/
 		//throw new NoSuchEntityException(entity);
+	}
+	
+	public Library getLibrary()
+	{
+		return c.getLibrary();
 	}
 	
 }

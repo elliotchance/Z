@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-04-07 16:35:42
+// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-04-09 01:19:22
 
 	package org.z.lexer;
 
@@ -866,8 +866,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:33:5: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:33:7: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:37:5: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:37:7: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||input.LA(1)=='_'||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -879,7 +879,7 @@ public class JavaLexer extends Lexer {
             }
 
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:33:31: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:37:31: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop1:
             do {
                 int alt1=2;
@@ -929,10 +929,10 @@ public class JavaLexer extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:36:5: ( ( '0' .. '9' )+ )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:36:7: ( '0' .. '9' )+
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:5: ( ( '0' .. '9' )+ )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:7: ( '0' .. '9' )+
             {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:36:7: ( '0' .. '9' )+
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:7: ( '0' .. '9' )+
             int cnt2=0;
             loop2:
             do {
@@ -987,14 +987,14 @@ public class JavaLexer extends Lexer {
         try {
             int _type = FLOAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:5: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:44:5: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT )
             int alt9=3;
             alt9 = dfa9.predict(input);
             switch (alt9) {
                 case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:9: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )?
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:44:9: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )?
                     {
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:9: ( '0' .. '9' )+
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:44:9: ( '0' .. '9' )+
                     int cnt3=0;
                     loop3:
                     do {
@@ -1035,7 +1035,7 @@ public class JavaLexer extends Lexer {
 
                     match('.'); 
 
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:25: ( '0' .. '9' )*
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:44:25: ( '0' .. '9' )*
                     loop4:
                     do {
                         int alt4=2;
@@ -1069,7 +1069,7 @@ public class JavaLexer extends Lexer {
                     } while (true);
 
 
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:37: ( EXPONENT )?
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:44:37: ( EXPONENT )?
                     int alt5=2;
                     int LA5_0 = input.LA(1);
 
@@ -1078,7 +1078,7 @@ public class JavaLexer extends Lexer {
                     }
                     switch (alt5) {
                         case 1 :
-                            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:40:37: EXPONENT
+                            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:44:37: EXPONENT
                             {
                             mEXPONENT(); 
 
@@ -1092,11 +1092,11 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:41:9: '.' ( '0' .. '9' )+ ( EXPONENT )?
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:45:9: '.' ( '0' .. '9' )+ ( EXPONENT )?
                     {
                     match('.'); 
 
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:41:13: ( '0' .. '9' )+
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:45:13: ( '0' .. '9' )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -1135,7 +1135,7 @@ public class JavaLexer extends Lexer {
                     } while (true);
 
 
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:41:25: ( EXPONENT )?
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:45:25: ( EXPONENT )?
                     int alt7=2;
                     int LA7_0 = input.LA(1);
 
@@ -1144,7 +1144,7 @@ public class JavaLexer extends Lexer {
                     }
                     switch (alt7) {
                         case 1 :
-                            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:41:25: EXPONENT
+                            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:45:25: EXPONENT
                             {
                             mEXPONENT(); 
 
@@ -1158,9 +1158,9 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:42:9: ( '0' .. '9' )+ EXPONENT
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:46:9: ( '0' .. '9' )+ EXPONENT
                     {
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:42:9: ( '0' .. '9' )+
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:46:9: ( '0' .. '9' )+
                     int cnt8=0;
                     loop8:
                     do {
@@ -1220,7 +1220,7 @@ public class JavaLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:46:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:50:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -1250,13 +1250,13 @@ public class JavaLexer extends Lexer {
             }
             switch (alt13) {
                 case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:46:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:50:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                     {
                     match("//"); 
 
 
 
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:46:14: (~ ( '\\n' | '\\r' ) )*
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:50:14: (~ ( '\\n' | '\\r' ) )*
                     loop10:
                     do {
                         int alt10=2;
@@ -1290,7 +1290,7 @@ public class JavaLexer extends Lexer {
                     } while (true);
 
 
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:46:28: ( '\\r' )?
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:50:28: ( '\\r' )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
@@ -1299,7 +1299,7 @@ public class JavaLexer extends Lexer {
                     }
                     switch (alt11) {
                         case 1 :
-                            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:46:28: '\\r'
+                            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:50:28: '\\r'
                             {
                             match('\r'); 
 
@@ -1316,13 +1316,13 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:47:9: '/*' ( options {greedy=false; } : . )* '*/'
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:51:9: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
 
 
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:47:14: ( options {greedy=false; } : . )*
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:51:14: ( options {greedy=false; } : . )*
                     loop12:
                     do {
                         int alt12=2;
@@ -1347,7 +1347,7 @@ public class JavaLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:47:42: .
+                    	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:51:42: .
                     	    {
                     	    matchAny(); 
 
@@ -1384,8 +1384,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:50:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:50:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:54:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:54:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             {
             if ( (input.LA(1) >= '\t' && input.LA(1) <= '\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();
@@ -1415,12 +1415,12 @@ public class JavaLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:58:5: ( '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"' )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:58:8: '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"'
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:62:5: ( '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:62:8: '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"'
             {
             match('\"'); 
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:58:12: ( ESC_SEQ |~ ( '\\\\' | '\"' ) )*
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:62:12: ( ESC_SEQ |~ ( '\\\\' | '\"' ) )*
             loop14:
             do {
                 int alt14=3;
@@ -1436,7 +1436,7 @@ public class JavaLexer extends Lexer {
 
                 switch (alt14) {
             	case 1 :
-            	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:58:14: ESC_SEQ
+            	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:62:14: ESC_SEQ
             	    {
             	    mESC_SEQ(); 
 
@@ -1444,7 +1444,7 @@ public class JavaLexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:58:24: ~ ( '\\\\' | '\"' )
+            	    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:62:24: ~ ( '\\\\' | '\"' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '!')||(input.LA(1) >= '#' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -1483,12 +1483,12 @@ public class JavaLexer extends Lexer {
         try {
             int _type = CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:61:5: ( '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\'' )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:61:8: '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\''
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:65:5: ( '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\'' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:65:8: '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\''
             {
             match('\''); 
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:61:13: ( ESC_SEQ |~ ( '\\'' | '\\\\' ) )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:65:13: ( ESC_SEQ |~ ( '\\'' | '\\\\' ) )
             int alt15=2;
             int LA15_0 = input.LA(1);
 
@@ -1507,7 +1507,7 @@ public class JavaLexer extends Lexer {
             }
             switch (alt15) {
                 case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:61:15: ESC_SEQ
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:65:15: ESC_SEQ
                     {
                     mESC_SEQ(); 
 
@@ -1515,7 +1515,7 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:61:25: ~ ( '\\'' | '\\\\' )
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:65:25: ~ ( '\\'' | '\\\\' )
                     {
                     if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
                         input.consume();
@@ -1549,8 +1549,8 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "EXPONENT"
     public final void mEXPONENT() throws RecognitionException {
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:74:10: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:74:12: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:70:10: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:70:12: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1562,7 +1562,7 @@ public class JavaLexer extends Lexer {
             }
 
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:74:22: ( '+' | '-' )?
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:70:22: ( '+' | '-' )?
             int alt16=2;
             int LA16_0 = input.LA(1);
 
@@ -1589,7 +1589,7 @@ public class JavaLexer extends Lexer {
             }
 
 
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:74:33: ( '0' .. '9' )+
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:70:33: ( '0' .. '9' )+
             int cnt17=0;
             loop17:
             do {
@@ -1641,7 +1641,7 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "HEX_DIGIT"
     public final void mHEX_DIGIT() throws RecognitionException {
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:77:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:73:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
             // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:
             {
             if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'F')||(input.LA(1) >= 'a' && input.LA(1) <= 'f') ) {
@@ -1667,7 +1667,7 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "ESC_SEQ"
     public final void mESC_SEQ() throws RecognitionException {
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:81:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:77:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
             int alt18=3;
             int LA18_0 = input.LA(1);
 
@@ -1720,7 +1720,7 @@ public class JavaLexer extends Lexer {
             }
             switch (alt18) {
                 case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:81:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' )
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:77:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' )
                     {
                     match('\\'); 
 
@@ -1737,7 +1737,7 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:82:9: UNICODE_ESC
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:78:9: UNICODE_ESC
                     {
                     mUNICODE_ESC(); 
 
@@ -1745,7 +1745,7 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:83:9: OCTAL_ESC
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:79:9: OCTAL_ESC
                     {
                     mOCTAL_ESC(); 
 
@@ -1765,7 +1765,7 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "OCTAL_ESC"
     public final void mOCTAL_ESC() throws RecognitionException {
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:88:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:84:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
             int alt19=3;
             int LA19_0 = input.LA(1);
 
@@ -1816,7 +1816,7 @@ public class JavaLexer extends Lexer {
             }
             switch (alt19) {
                 case 1 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:88:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:84:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     match('\\'); 
 
@@ -1853,7 +1853,7 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:89:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:85:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     match('\\'); 
 
@@ -1880,7 +1880,7 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:90:9: '\\\\' ( '0' .. '7' )
+                    // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:86:9: '\\\\' ( '0' .. '7' )
                     {
                     match('\\'); 
 
@@ -1909,8 +1909,8 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "UNICODE_ESC"
     public final void mUNICODE_ESC() throws RecognitionException {
         try {
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:95:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:95:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:91:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:91:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
             {
             match('\\'); 
 
@@ -2337,7 +2337,7 @@ public class JavaLexer extends Lexer {
             this.transition = DFA9_transition;
         }
         public String getDescription() {
-            return "39:1: FLOAT : ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT );";
+            return "43:1: FLOAT : ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT );";
         }
     }
     static final String DFA20_eotS =

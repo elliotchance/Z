@@ -20,7 +20,7 @@ public class ReturnStatement extends SimpleStatement implements Renderable
 	@Override
 	public String toString()
 	{
-		return expression.toString();
+		return "return " + expression.toString();
 	}
 	
 }

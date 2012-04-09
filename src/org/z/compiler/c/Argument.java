@@ -15,7 +15,17 @@ public class Argument extends CompileEntity
 	@Override
 	public String render() throws CompilerException
 	{
-		return "int" /*a.getType().toString()*/ + " " + a.getName();
+		return a.getType().toString() + " " + a.getName();
+	}
+	
+	public String getType()
+	{
+		return a.getType().toString();
+	}
+	
+	public String getName()
+	{
+		return a.getName();
 	}
 	
 }

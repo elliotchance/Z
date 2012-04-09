@@ -1,6 +1,7 @@
 package org.z.library;
 
 import java.util.ArrayList;
+import org.z.compiler.CompilerException;
 import org.z.compiler.NoSuchEntityException;
 
 public class Library
@@ -56,6 +57,30 @@ public class Library
 		}
 		catch(NoSuchEntityException e) {
 			return false;
+		}
+	}
+	
+	public void registerClass(org.z.library.Class c) throws CompilerException
+	{
+		if(c.getFullName().equals(""))
+			throw new CompilerException("Class has no name.");
+		if(classExists(c.getFullName()))
+			throw new CompilerException("Class " + c.getFullName() + " is already registered.");
+		
+		String[] parts = c.getFullName().split("\\.");
+		Package p;
+		try {
+			p = getPackage(parts[0]);
+		}
+		catch(NoSuchEntityException e) {
+			p = new Package(parts[0]);
+			addPackage(p);
+		}
+		
+		for(int i = 1; i < parts.length; ++i) {
+			Package p2 = new Package(parts[i]);
+			p.addSubpackage(p2);
+			p = p2;
 		}
 	}
 	

@@ -20,4 +20,16 @@ public class ArgumentList extends ArrayList<Argument> implements Renderable
 		return r.toString();
 	}
 	
+	public String getSignature()
+	{
+		String r = "";
+		for(Argument a : this) {
+			if(a.getType().toString().equals("int"))
+				r += "I";
+			else
+				r += "L" + a.getAbsoluteType().getType().toString().replace('.', '_');
+		}
+		return r;
+	}
+	
 }

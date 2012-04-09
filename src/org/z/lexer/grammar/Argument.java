@@ -9,6 +9,16 @@ public class Argument implements Renderable
 	
 	private boolean isFinal;
 
+	public Argument()
+	{
+	}
+
+	public Argument(Type type, String name)
+	{
+		this.type = type;
+		this.name = name;
+	}
+
 	public String getName()
 	{
 		return name;
@@ -43,6 +53,13 @@ public class Argument implements Renderable
 	public void setIsFinal(boolean isFinal)
 	{
 		this.isFinal = isFinal;
+	}
+	
+	public Argument getAbsoluteType()
+	{
+		if(type.getBase().equals("String"))
+			return new Argument(new Type("java.lang.String"), name);
+		return this;
 	}
 	
 }

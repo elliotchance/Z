@@ -16,15 +16,35 @@ public class Class implements Renderable
 	private ArrayList<InstanceVariable> instanceVariables = new ArrayList<InstanceVariable>();
 	
 	private Block staticBlock = null;
+	
+	private String packageName = null;
 
 	public String getName()
 	{
 		return name;
 	}
 
+	public String getFullName()
+	{
+		String r = name;
+		if(packageName != null && !packageName.equals(""))
+			r = packageName + "." + name;
+		return r;
+	}
+
 	public void setName(String name)
 	{
-		this.name = name;
+		String[] parts = name.split("\\.");
+		this.packageName = "";
+		boolean first = true;
+		for(int i = 0; i < parts.length - 1; ++i) {
+			if(first)
+				first = false;
+			else
+				this.packageName += ".";
+			this.packageName += parts[i];
+		}
+		this.name = parts[parts.length - 1];
 	}
 
 	public boolean isIsPublic()
@@ -104,6 +124,16 @@ public class Class implements Renderable
 	public void setStaticBlock(Block staticBlock)
 	{
 		this.staticBlock = staticBlock;
+	}
+
+	public String getPackageName()
+	{
+		return packageName;
+	}
+
+	public void setPackageName(String packageName)
+	{
+		this.packageName = packageName;
 	}
 	
 }

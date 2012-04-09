@@ -15,8 +15,8 @@ String* _String_new(char* raw) {
     return r;
 }
 
-Object* _Object_new(char* className, void* obj) {
-    Object *o = (Object*) malloc(sizeof(Object));
+java_lang_Object* _Object_new(char* className, void* obj) {
+    java_lang_Object *o = (java_lang_Object*) malloc(sizeof(java_lang_Object));
     o->className = (char*) malloc(strlen(className));
     o->obj = obj;
     return o;
