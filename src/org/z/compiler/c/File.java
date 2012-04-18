@@ -32,13 +32,20 @@ public class File extends CompileEntity
 		}
 	}
 	
-	public void addImport(String path)
+	public final void addImport(String path) throws CompilerException
 	{
+		// only include the file if it exists
+		String libpath = c.getLibraryLocation() + "/" + path.replace('.', '/') + ".java";
+		if(!new java.io.File(libpath).exists()) {
+			System.out.println("Ignoring import: " + path + " -> " + libpath);
+			return;
+		}
+		
 		Library lib = c.getMain().getLibrary();
 		if(lib.classExists(path))
 			return;
+		lib.addCurrentlyParsing(path);
 		
-		String libpath = "library/" + path.replace('.', '/') + ".java";
 		System.out.println("Add import: " + path + " -> " + libpath);
 		try {
 			c.getMain().parseFile(c, libpath);
@@ -63,6 +70,11 @@ public class File extends CompileEntity
 	public Library getLibrary()
 	{
 		return c.getLibrary();
+	}
+
+	public Compiler getCompiler()
+	{
+		return c;
 	}
 	
 }

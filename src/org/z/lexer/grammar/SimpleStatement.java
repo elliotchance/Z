@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class SimpleStatement implements Statement, Renderable
+public class SimpleStatement extends Statement
 {
 	
 	private Expression expression;
@@ -16,9 +16,11 @@ public class SimpleStatement implements Statement, Renderable
 	}
 
 	@Override
-	public String toString()
+	public String toString(int indent)
 	{
-		return expression.toString();
+		if(expression == null)
+			return "???";
+		return indent(indent) + expression.toString() + ";";
 	}
 	
 }

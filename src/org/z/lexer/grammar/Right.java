@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class Right implements Renderable
+public class Right
 {
 	
 	private String operator;

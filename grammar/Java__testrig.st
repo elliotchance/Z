@@ -28,6 +28,7 @@ public class __Test__ {
 
         JavaParser g = new JavaParser(tokens, 49100, null);
         try {
+		//System.out.println(g.method().result);
 		// parse
 		File f = g.run().result;
 		f.setFileName("HelloWorld.java");

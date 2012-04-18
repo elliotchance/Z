@@ -5,23 +5,20 @@ import org.z.compiler.CompilerException;
 public class ComparisonExpression extends CompileEntity
 {
 	
-	private org.z.lexer.grammar.ComparisonExpression comparisonExpression;
+	private org.z.lexer.grammar.ComparisonExpression expression;
 	
 	private org.z.compiler.c.File f;
 	
-	public ComparisonExpression(org.z.compiler.c.File f, org.z.lexer.grammar.ComparisonExpression comparisonExpression)
+	public ComparisonExpression(org.z.compiler.c.File f, org.z.lexer.grammar.ComparisonExpression expression)
 	{
 		this.f = f;
-		this.comparisonExpression = comparisonExpression;
+		this.expression = expression;
 	}
 	
 	@Override
 	public String render() throws CompilerException
 	{
-		if(comparisonExpression.getRight().isEmpty())
-			return new Expression(f, comparisonExpression.getLeft()).render();
-		throw new CompilerException("Todo");
-		//return comparisonExpression.toString();
+		return renderBinary(f, expression);
 	}
 	
 }

@@ -9,6 +9,23 @@ public class Library
 	
 	private ArrayList<Package> packages = new ArrayList<Package>();
 	
+	private ArrayList<String> currentlyParsing = new ArrayList<String>();
+
+	public ArrayList<String> getCurrentlyParsing()
+	{
+		return currentlyParsing;
+	}
+
+	public void setCurrentlyParsing(ArrayList<String> currentlyParsing)
+	{
+		this.currentlyParsing = currentlyParsing;
+	}
+
+	public ArrayList<Package> getPackages()
+	{
+		return packages;
+	}
+	
 	public Library addPackage(Package p)
 	{
 		packages.add(p);
@@ -43,9 +60,28 @@ public class Library
 		throw new NoSuchEntityException(name + " (package)");
 	}
 	
+	public void addCurrentlyParsing(String name)
+	{
+		if(!isCurrentlyParsing(name))
+			currentlyParsing.add(name);
+	}
+	
+	public boolean isCurrentlyParsing(String name)
+	{
+		for(String cl : currentlyParsing) {
+			if(cl.equals(name))
+				return true;
+		}
+		return false;
+	}
+	
 	public boolean classExists(String name)
 	{
 		try {
+			// check currently parsing first
+			if(isCurrentlyParsing(name))
+				return true;
+			
 			String[] parts = name.split(".");
 			Package p = getPackage(parts[0]);
 			for(int i = 1; i < parts.length; ++i)
@@ -64,7 +100,7 @@ public class Library
 	{
 		if(c.getFullName().equals(""))
 			throw new CompilerException("Class has no name.");
-		if(classExists(c.getFullName()))
+		if(!isCurrentlyParsing(c.getFullName()) && classExists(c.getFullName()))
 			throw new CompilerException("Class " + c.getFullName() + " is already registered.");
 		
 		String[] parts = c.getFullName().split("\\.");

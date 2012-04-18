@@ -114,15 +114,22 @@ public class Main
 				throw new CompilerException("Error parsing file.");
 
 			// compile Java
-			/*{
+			{
 				org.z.compiler.Compiler c = new org.z.compiler.java.Compiler();
 				c.addFile(f);
 				ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
 				for(CompiledFile cf : compiledFiles) {
-					System.out.println("=== " + cf.getFileName() + " ===");
-					System.out.println(cf.getContent());
+					// create precompiled directory
+					String precompiledJava = cf.getFileName().replaceFirst("\\/library\\/", "/library_precompiled/");
+					String dir = precompiledJava.substring(0, precompiledJava.lastIndexOf('/'));
+					new java.io.File(dir).mkdirs();
+					
+					// write parsed java file
+					java.io.File out = new java.io.File(precompiledJava);
+					FileOutputStream outStream = new FileOutputStream(out);
+					outStream.write(cf.getContent().getBytes());
 				}
-			}*/
+			}
 
 			// compile C
 			compiler.addFile(f);

@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class ExceptionStatement implements ComplexStatement, Renderable
+public class ExceptionStatement extends ComplexStatement
 {
 	
 	private TryBlock tryBlock = null;

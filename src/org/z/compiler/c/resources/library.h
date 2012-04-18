@@ -2,10 +2,13 @@
 #include <stdio.h>
 #include <memory.h>
 
-typedef struct {
-    char *className;
-    void *obj;
-} java_lang_Object;
+#define jfinal
+#define jstatic
+#define jnative
+#define jsynchronized
+#define jpublic
+#define jprotected
+#define jprivate
 
 typedef struct {
     int len;
@@ -27,6 +30,6 @@ System *static_System;
 // prototypes
 void _init();
 String* _String_new(char* raw);
-java_lang_Object* _Object_new(char* className, void* obj);
+//java_lang_Object* _Object_new(char* className, void* obj);
 void println_L(String *string);
 void println_F(float f);

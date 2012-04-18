@@ -1,13 +1,13 @@
 package org.z.lexer.grammar;
 
-public class Argument implements Renderable
+public class Argument
 {
 	
-	private Type type;
+	protected Type type;
 	
-	private String name;
+	protected String name;
 	
-	private boolean isFinal;
+	protected boolean isFinal;
 
 	public Argument()
 	{
@@ -45,7 +45,7 @@ public class Argument implements Renderable
 		return (isFinal ? "final " : "") + type.toString() + " " + name;
 	}
 
-	public boolean isIsFinal()
+	public boolean isFinal()
 	{
 		return isFinal;
 	}

@@ -12,4 +12,6 @@ public interface Compiler
 	
 	public ArrayList<CompiledFile> getCompiledFiles();
 	
+	public String getLibraryLocation();
+	
 }

@@ -13,7 +13,7 @@ public class Compiler implements org.z.compiler.Compiler
 	@Override
 	public void addFile(File f) throws CompilerException
 	{
-		files.add(new CompiledFile(f.getFileName(), f.toString()));
+		files.add(new CompiledFile(f.getFileName(), f.toString(0)));
 	}
 
 	@Override
@@ -25,6 +25,12 @@ public class Compiler implements org.z.compiler.Compiler
 	@Override
 	public void init(String entryClass) throws CompilerException
 	{
+	}
+	
+	@Override
+	public String getLibraryLocation()
+	{
+		return null;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package org.z.compiler.c;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import org.z.Main;
 import org.z.compiler.CompiledFile;
@@ -39,6 +40,7 @@ public class Compiler implements org.z.compiler.Compiler
 	@Override
 	public void init(String entryClass) throws CompilerException
 	{
+		// main()
 		StringBuilder sb = new StringBuilder();
 		sb.append(("#include \"" + entryClass.replace('.', '_') + ".h\"\n\n"));
 		sb.append("int main(int argc, char** argv) {\n");
@@ -47,6 +49,14 @@ public class Compiler implements org.z.compiler.Compiler
 		sb.append("\treturn 0;\n");
 		sb.append("}\n");
 		addCompiledFile(new CompiledFile("main.c", sb.toString()));
+		
+		// we must have these classes loaded
+		try {
+			main.parseFile(this, getLibraryLocation() + "/java/lang/Object.java");
+		}
+		catch(IOException e) {
+			throw new CompilerException(e.getMessage());
+		}
 	}
 	
 	public Main getMain()
@@ -57,6 +67,12 @@ public class Compiler implements org.z.compiler.Compiler
 	public Library getLibrary()
 	{
 		return main.getLibrary();
+	}
+	
+	@Override
+	public String getLibraryLocation()
+	{
+		return "../library";
 	}
 	
 }

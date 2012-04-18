@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class SynchronizedStatement implements Statement, Renderable
+public class SynchronizedStatement extends ComplexStatement
 {
 	
 	private Expression expression;

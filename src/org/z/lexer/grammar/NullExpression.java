@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import org.z.compiler.CompilerException;
 
-public class NullExpression implements Expression, Renderable
+public class NullExpression implements Expression
 {
 
 	@Override

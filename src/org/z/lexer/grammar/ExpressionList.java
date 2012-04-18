@@ -3,7 +3,7 @@ package org.z.lexer.grammar;
 import java.util.ArrayList;
 import org.z.compiler.CompilerException;
 
-public class ExpressionList extends ArrayList<Expression> implements Renderable
+public class ExpressionList extends ArrayList<Expression>
 {
 
 	@Override

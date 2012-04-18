@@ -3,7 +3,7 @@ package org.z.lexer.grammar;
 import java.util.Arrays;
 import org.z.compiler.CompilerException;
 
-public class FunctionCall implements Expression, Renderable
+public class FunctionCall implements Expression
 {
 	
 	private Expression expression;
@@ -33,7 +33,9 @@ public class FunctionCall implements Expression, Renderable
 	@Override
 	public String toString()
 	{
-		String r = expression.toString();
+		String r = "";
+		if(expression != null)
+			r += expression.toString();
 		if(arguments != null)
 			r += "(" + arguments.toString() + ")";
 		return r;
@@ -46,7 +48,8 @@ public class FunctionCall implements Expression, Renderable
 			return expression.getDataType();
 		
 		System.out.println(Arrays.toString(arguments.getDataTypes()));
-		throw new CompilerException("Not supported.");
+		return new Type("???");
+		//throw new CompilerException("Not supported.");
 	}
 	
 }

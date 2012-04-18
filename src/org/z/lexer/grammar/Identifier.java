@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import org.z.compiler.CompilerException;
 
-public class Identifier implements Expression, Renderable
+public class Identifier implements Expression
 {
 	
 	private String identifier;
@@ -21,7 +21,7 @@ public class Identifier implements Expression, Renderable
 	@Override
 	public Type getDataType() throws CompilerException
 	{
-		throw new CompilerException("Not supported.");
+		return new Type("???"); //throw new CompilerException("Not supported.");
 	}
 	
 }

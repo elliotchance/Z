@@ -29,7 +29,20 @@ public class Expression extends CompileEntity
 			return new ComparisonExpression(f, (org.z.lexer.grammar.ComparisonExpression) s).render();
 		if(s instanceof org.z.lexer.grammar.AssignmentExpression)
 			return new AssignmentExpression(f, (org.z.lexer.grammar.AssignmentExpression) s).render();
-		throw new EntityNotSupportedException(s);
+		if(s instanceof org.z.lexer.grammar.LogicalOrExpression)
+			return new LogicalOrExpression(f, (org.z.lexer.grammar.LogicalOrExpression) s).render();
+		if(s instanceof org.z.lexer.grammar.LogicalAndExpression)
+			return new LogicalAndExpression(f, (org.z.lexer.grammar.LogicalAndExpression) s).render();
+		if(s instanceof org.z.lexer.grammar.EqualityExpression)
+			return new EqualityExpression(f, (org.z.lexer.grammar.EqualityExpression) s).render();
+		if(s instanceof org.z.lexer.grammar.AdditionExpression)
+			return new AdditionExpression(f, (org.z.lexer.grammar.AdditionExpression) s).render();
+		if(s instanceof org.z.lexer.grammar.GroupOperator)
+			return new GroupOperator(f, (org.z.lexer.grammar.GroupOperator) s).render();
+		if(s instanceof org.z.lexer.grammar.ThisExpression)
+			return "this";
+		return "???";
+		//throw new EntityNotSupportedException(s);
 	}
 	
 }

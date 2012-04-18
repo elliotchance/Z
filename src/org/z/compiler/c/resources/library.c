@@ -15,12 +15,12 @@ String* _String_new(char* raw) {
     return r;
 }
 
-java_lang_Object* _Object_new(char* className, void* obj) {
+/*java_lang_Object* _Object_new(char* className, void* obj) {
     java_lang_Object *o = (java_lang_Object*) malloc(sizeof(java_lang_Object));
     o->className = (char*) malloc(strlen(className));
     o->obj = obj;
     return o;
-}
+}*/
 
 void println_L(String *string) {
     printf("%s\n", string->data);

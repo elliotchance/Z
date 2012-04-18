@@ -1,9 +1,8 @@
 package org.z.lexer.grammar;
 
-import java.util.ArrayList;
 import org.z.compiler.CompilerException;
 
-public class ObjectAccess extends BinaryExpression implements Renderable
+public class ObjectAccess extends BinaryExpression
 {
 
 	@Override

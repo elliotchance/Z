@@ -20,14 +20,16 @@ public class SimpleStatement extends CompileEntity
 	public String render() throws CompilerException
 	{
 		if(s instanceof org.z.lexer.grammar.ReturnStatement)
-			return "return " + new Expression(f, s.getExpression()).render();
+			return "return " + new Expression(f, s.getExpression()).render() + ";\n";
 		
 		// these take care of themselves
-		if(s.getExpression() instanceof org.z.lexer.grammar.ObjectAccess)
+		if(s.getExpression() instanceof org.z.lexer.grammar.Expression)
 			return new Expression(f, s.getExpression()).render();
 		
+		if(s.getExpression() == null)
+			// throw new CompilerException("NULL expression for SimpleStatement");
+			return "???";
 		throw new EntityNotSupportedException(s.getExpression());
-		//return new Expression(f, ).render();
 	}
 	
 }

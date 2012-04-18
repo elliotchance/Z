@@ -12,14 +12,20 @@ public class Method extends CompileEntity
 	{
 		if(m.isStatic())
 			cf.appendContent("/* static */ ");
-		cf.appendContent(m.getReturnType().toString() + " ");
+		if(m.getReturnType() != null)
+			cf.appendContent(m.getReturnType().toString() + " ");
 		cf.appendContent(c.getFullName().replace('.', '_') + "_" + m.getName() + "(");
 		
 		cf.appendContent(getCArguments(m));
 		
 		cf.appendContent(")\n{\n");
-		for(org.z.lexer.grammar.Statement s : m.getBlock())
-			cf.appendContent("\t" + new Statement(f, s).render() + ";\n");
+		if(m.hasBody()) {
+			for(org.z.lexer.grammar.Statement s : m.getBlock().getStatements())
+				cf.appendContent("\t" + new Statement(f, s).render() + ";\n");
+		}
+		else {
+			cf.appendContent("// native method\n");
+		}
 		cf.appendContent("}\n\n");
 	}
 	
@@ -53,9 +59,16 @@ public class Method extends CompileEntity
 	
 	public static String getCType(Type type)
 	{
-		if(type.toString().equals("int"))
-			return type.toString();
-		return "java_lang_Object*";
+		return getCType(type, "");
+	}
+	
+	public static String getCType(Type type, String prefix)
+	{
+		if(type != null) {
+			if(type.toString().equals("int"))
+				return type.toString();
+		}
+		return prefix + "java_lang_Object*";
 	}
 	
 }

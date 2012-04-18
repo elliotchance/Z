@@ -2,22 +2,68 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class Class implements Renderable
+public class Class extends ComplexStatement
 {
 	
 	private String name = null;
 	
-	private boolean isPublic = false;
+	private String permission = null;
 	
 	private boolean isFinal = false;
 	
-	private ArrayList<Method> methods = new ArrayList<Method>();
+	private boolean isStatic = false;
 	
-	private ArrayList<InstanceVariable> instanceVariables = new ArrayList<InstanceVariable>();
-	
-	private Block staticBlock = null;
+	private boolean isAbstract = false;
 	
 	private String packageName = null;
+	
+	private Type extension = null;
+	
+	private ArrayList<Type> implementsList = new ArrayList<Type>();
+	
+	private Generic generic = null;
+	
+	private ClassBody body;
+
+	public String getPermission()
+	{
+		return permission;
+	}
+
+	public void setPermission(String permission)
+	{
+		this.permission = permission;
+	}
+
+	public boolean isIsStatic()
+	{
+		return isStatic;
+	}
+
+	public void setIsStatic(boolean isStatic)
+	{
+		this.isStatic = isStatic;
+	}
+
+	public Generic getGeneric()
+	{
+		return generic;
+	}
+
+	public void setGeneric(Generic generic)
+	{
+		this.generic = generic;
+	}
+	
+	public void addImplementation(Type imp)
+	{
+		implementsList.add(imp);
+	}
+
+	public ArrayList<Type> getImplementsList()
+	{
+		return implementsList;
+	}
 
 	public String getName()
 	{
@@ -46,59 +92,22 @@ public class Class implements Renderable
 		}
 		this.name = parts[parts.length - 1];
 	}
-
-	public boolean isIsPublic()
-	{
-		return isPublic;
-	}
-
-	public void setIsPublic(boolean isPublic)
-	{
-		this.isPublic = isPublic;
-	}
 	
 	@Override
-	public String toString()
+	public String toString(int indent)
 	{
 		StringBuilder r = new StringBuilder();
-		r.append((isPublic ? "public " : ""));
+		r.append(indent(indent));
+		r.append((permission != null ? permission + " " : ""));
 		r.append((isFinal ? "final " : ""));
+		r.append((isStatic ? "static " : ""));
+		r.append((isAbstract ? "abstract " : ""));
 		r.append("class ");
 		r.append(name);
-		r.append(" {");
-		
-		if(staticBlock != null) {
-			r.append("\tstatic {\n");
-			r.append(staticBlock.toString());
-			r.append("\t}\n");
-		}
-		
-		for(InstanceVariable iv : instanceVariables) {
-			r.append("\t");
-			r.append(iv.toString());
-			r.append("\n");
-		}
-		if(instanceVariables.size() > 0)
-			r.append("\n");
-		
-		for(Method m : methods) {
-			r.append("\n");
-			r.append(m.toString());
-			r.append("\n");
-		}
-		
-		r.append("}\n");
+		r.append(" ");
+		r.append(body.toString(indent));
+		r.append("\n");
 		return r.toString();
-	}
-	
-	public void addMethod(Method m)
-	{
-		methods.add(m);
-	}
-
-	public ArrayList<Method> getMethods()
-	{
-		return methods;
 	}
 
 	public boolean isFinal()
@@ -110,21 +119,6 @@ public class Class implements Renderable
 	{
 		this.isFinal = isFinal;
 	}
-	
-	public void addInstanceVariable(InstanceVariable iv)
-	{
-		instanceVariables.add(iv);
-	}
-
-	public Block getStaticBlock()
-	{
-		return staticBlock;
-	}
-
-	public void setStaticBlock(Block staticBlock)
-	{
-		this.staticBlock = staticBlock;
-	}
 
 	public String getPackageName()
 	{
@@ -134,6 +128,36 @@ public class Class implements Renderable
 	public void setPackageName(String packageName)
 	{
 		this.packageName = packageName;
+	}
+
+	public ClassBody getBody()
+	{
+		return body;
+	}
+
+	public void setBody(ClassBody body)
+	{
+		this.body = body;
+	}
+
+	public Type getExtension()
+	{
+		return extension;
+	}
+
+	public void setExtension(Type extension)
+	{
+		this.extension = extension;
+	}
+
+	public boolean isAbstract()
+	{
+		return isAbstract;
+	}
+
+	public void setIsAbstract(boolean isAbstract)
+	{
+		this.isAbstract = isAbstract;
 	}
 	
 }

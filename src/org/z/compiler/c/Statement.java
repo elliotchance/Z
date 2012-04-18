@@ -23,6 +23,8 @@ public class Statement extends CompileEntity
 			return "";
 		if(s instanceof org.z.lexer.grammar.SimpleStatement)
 			return new SimpleStatement(f, (org.z.lexer.grammar.SimpleStatement) s).render();
+		if(s instanceof org.z.lexer.grammar.ComplexStatement)
+			return new ComplexStatement(f, (org.z.lexer.grammar.ComplexStatement) s).render();
 		throw new EntityNotSupportedException(s);
 	}
 	

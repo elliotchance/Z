@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class Method implements Renderable
+public class Method extends Renderable implements Annotatable
 {
 	
 	private String name;
@@ -26,6 +26,42 @@ public class Method implements Renderable
 	private boolean hasBody = false;
 	
 	private ArrayList<String> throwList = new ArrayList<String>();
+	
+	private Generic staticGeneric = null;
+	
+	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+
+	@Override
+	public void addAnnotation(Annotation anno)
+	{
+		annotations.add(anno);
+	}
+
+	@Override
+	public ArrayList<Annotation> getAnnotations()
+	{
+		return annotations;
+	}
+
+	public ArrayList<String> getThrowList()
+	{
+		return throwList;
+	}
+
+	public void setThrowList(ArrayList<String> throwList)
+	{
+		this.throwList = throwList;
+	}
+
+	public Generic getStaticGeneric()
+	{
+		return staticGeneric;
+	}
+
+	public void setStaticGeneric(Generic staticGeneric)
+	{
+		this.staticGeneric = staticGeneric;
+	}
 	
 	public void addThrows(String throwClass)
 	{
@@ -93,9 +129,9 @@ public class Method implements Renderable
 	}
 
 	@Override
-	public String toString()
+	public String toString(int indent)
 	{
-		StringBuilder r = new StringBuilder("\t");
+		StringBuilder r = new StringBuilder(indent(indent));
 		if(permission != null) {
 			r.append(permission);
 			r.append(" ");
@@ -108,7 +144,8 @@ public class Method implements Renderable
 		if(isNative)
 			r.append("native ");
 		
-		r.append(returnType.toString());
+		if(returnType != null)
+			r.append(returnType.toString());
 		r.append(" ");
 		r.append(name);
 		r.append("(");
@@ -129,8 +166,9 @@ public class Method implements Renderable
 		
 		if(hasBody) {
 			r.append(" {\n");
-			r.append(block.toString());
-			r.append("\t}");
+			r.append(block.toString(indent + 1));
+			r.append(indent(indent));
+			r.append("}");
 		}
 		else
 			r.append(";");

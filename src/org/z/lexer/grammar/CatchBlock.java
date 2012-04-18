@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-public class CatchBlock extends Block implements Renderable
+public class CatchBlock extends Block
 {
 	
 	private String exceptionClass;

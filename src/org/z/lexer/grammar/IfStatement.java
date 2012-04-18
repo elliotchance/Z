@@ -1,11 +1,13 @@
 package org.z.lexer.grammar;
 
-public class IfStatement implements ComplexStatement, Renderable
+public class IfStatement extends ComplexStatement
 {
 	
 	private Expression condition;
 	
 	private Block block = new Block();
+	
+	private Block elseBlock = null;
 
 	public Block getBlock()
 	{
@@ -27,10 +29,24 @@ public class IfStatement implements ComplexStatement, Renderable
 		this.condition = condition;
 	}
 
-	@Override
-	public String toString()
+	public Block getElseBlock()
 	{
-		return "if(" + condition.toString() + ") { " + block.toString() + "}\n";
+		return elseBlock;
+	}
+
+	public void setElseBlock(Block elseBlock)
+	{
+		this.elseBlock = elseBlock;
+	}
+
+	@Override
+	public String toString(int indent)
+	{
+		String r = indent(indent) + "if(" + condition.toString() + ") {\n" + block.toString(indent + 1) +
+			indent(indent) + "}\n";
+		if(elseBlock != null)
+			r += indent(indent) + "else {\n" + block.toString(indent + 1) + indent(indent) + "}\n";
+		return r;
 	}
 	
 }
