@@ -625,17 +625,20 @@ argument returns [org.z.lexer.grammar.Argument result]
 	;
 	
 statement returns [org.z.lexer.grammar.Statement result]
-	:	(stmt1=singleStatement {
-			$result = stmt1.result;
-		})
-		|
-		(stmt2=complexStatement {
-			$result = stmt2.result;
-		})
-		|
-		('{') => (stmt3=block {
-			$result = stmt3.result;
-		})
+	:	(
+			(stmt1=singleStatement {
+				$result = stmt1.result;
+			} ';'*)
+			|
+			(stmt2=complexStatement {
+				$result = stmt2.result;
+			})
+			|
+			('{') => (stmt3=block {
+				$result = stmt3.result;
+			})
+		)
+		
 	;
 	
 complexStatement returns [org.z.lexer.grammar.ComplexStatement result]
@@ -843,9 +846,11 @@ ifStatement returns [org.z.lexer.grammar.IfStatement result]
 		}
 		')'
 		(
-			sob=singleOrBlock {
+			(sob=singleOrBlock {
 				$result.setBlock(sob.result);
-			}
+			})
+			|
+			';'
 		)
 		(
 			K_ELSE
@@ -1341,14 +1346,23 @@ objectAccess returns [org.z.lexer.grammar.BinaryExpression result]
 		))*
 	;
 		
-functionCall returns [org.z.lexer.grammar.FunctionCall result]
+functionCall returns [org.z.lexer.grammar.Expression result]
 	:	expr=unaryExpression {
 			$result = new org.z.lexer.grammar.FunctionCall();
-			$result.setExpression(expr.result);
+			((org.z.lexer.grammar.FunctionCall) $result).setExpression(expr.result);
 		}
-		('(' (args=expressionList {
-			$result.setArguments(args.result);
-		})? ')' )?
+		('('
+			(args=expressionList {
+				((org.z.lexer.grammar.FunctionCall) $result).setArguments(args.result);
+			})?
+			')'
+		)?
+		(aa=arrayAccess {
+			if(!($result instanceof org.z.lexer.grammar.ArrayAccess)) {
+				$result = new org.z.lexer.grammar.ArrayAccess($result);
+			}
+			((org.z.lexer.grammar.ArrayAccess) $result).addRight(new org.z.lexer.grammar.Right("[]", aa.result));
+		})*
 	;
 	
 postUnaryOperator returns [java.lang.String result]
@@ -1431,12 +1445,6 @@ single returns [org.z.lexer.grammar.Expression result]
 				$result = v2.result;
 			})
 		)
-		(aa=arrayAccess {
-			if(!($result instanceof org.z.lexer.grammar.ArrayAccess)) {
-				$result = new org.z.lexer.grammar.ArrayAccess($result);
-			}
-			((org.z.lexer.grammar.ArrayAccess) $result).addRight(new org.z.lexer.grammar.Right("[]", aa.result));
-		})*
 	;
 	
 arrayAccess returns [org.z.lexer.grammar.Expression result]
@@ -1466,7 +1474,7 @@ value returns [org.z.lexer.grammar.Expression result]
 		}
 	|	x2=FLOAT {
 			String x2raw = x2.getText();
-			((org.z.lexer.grammar.Value) $result).setValue(Float.valueOf(x2raw.substring(1, x2raw.length() - 1)));
+			((org.z.lexer.grammar.Value) $result).setValue(Float.valueOf(x2raw.substring(0, x2raw.length() - 1)));
 		}
 	|	x3=STRING {
 			((org.z.lexer.grammar.Value) $result).setValue(x3.getText());
@@ -1482,7 +1490,7 @@ value returns [org.z.lexer.grammar.Expression result]
 		}
 	|	x7=LONG {
 			String x7raw = x7.getText();
-			((org.z.lexer.grammar.Value) $result).setValue(Long.valueOf(x7raw.substring(1, x7raw.length() - 1)));
+			((org.z.lexer.grammar.Value) $result).setValue(Long.valueOf(x7raw.substring(0, x7raw.length() - 1)));
 		}
 	|	x8=DOUBLE {
 			((org.z.lexer.grammar.Value) $result).setValue(Double.valueOf(x8.getText()));
