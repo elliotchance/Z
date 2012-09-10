@@ -2,12 +2,13 @@ package org.z.compiler.c;
 
 import java.io.IOException;
 import org.z.compiler.*;
+import org.z.lexer.grammar.GenericObject;
 import org.z.library.Library;
 
 public class File extends CompileEntity
 {
 	
-	private org.z.compiler.c.Compiler c;
+	protected org.z.compiler.c.Compiler c;
 	
 	protected org.z.lexer.grammar.File f;
 	
@@ -97,7 +98,63 @@ public class File extends CompileEntity
 	
 	public TypeResolution findClass(String className) throws CompilerException
 	{
-		return c.findClass(className);
+		// natives
+		if(org.z.lexer.grammar.Type.isNativeType(className)) {
+			return new TypeResolution(className, null);
+		}
+		
+		// absolute location, TODO: needs to find file location
+		if(className.contains(".")) {
+			return new TypeResolution(className, null);
+		}
+		
+		// java.lang
+		for(ClassPathItem classPath : c.getClassPath()) {
+			String fileLocation = classPath.getLocation() + "/java/lang/" + className + ".java";
+			if(new java.io.File(fileLocation).exists()) {
+				return new TypeResolution("java.lang." + className, fileLocation);
+			}
+		}
+		
+		// find the class through the imports
+		for(String importName : f.getImports()) {
+			if(importName.endsWith("." + className)) {
+				return new TypeResolution(importName, null);
+			}
+		}
+		
+		// its in this package
+		String packageFile = f.getPackageLocation() + "/" + className + ".java";
+		if(new java.io.File(packageFile).exists()) {
+			return new TypeResolution(f.getPackageName() + "." + className, packageFile);
+		}
+		
+		// self
+		for(GenericObject object : f.getObjects()) {
+			if(object.getName().equals(className)) {
+				return new TypeResolution(object.getFullName(), f.getFileName());
+			}
+		}
+		
+		// generics
+		// TODO: this is dodgy
+		/*for(GenericObject object : f.getObjects()) {
+			if(object instanceof org.z.lexer.grammar.Class) {
+				org.z.lexer.grammar.Class obj = (org.z.lexer.grammar.Class) object;
+				if(obj.getGeneric() != null) {
+					for(org.z.lexer.grammar.Type generic : obj.getGeneric().getTypes()) {
+						if(generic.getBase().equals(className)) {
+							return new TypeResolution(null, f.getFileName());
+						}
+					}
+				}
+			}
+		}*/
+		
+		// assume generic
+		System.out.println("Assume generic: " + className);
+		return new TypeResolution("java.lang.Object", f.getFileName());
+		//throw new CompilerException("Cannot find class " + className + " in " + f.getFileName() + ": Imports are " + f.getImports());
 	}
 	
 }

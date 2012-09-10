@@ -129,8 +129,9 @@ public class Compiler implements org.z.compiler.Compiler
 	public TypeResolution findClass(String className) throws CompilerException
 	{
 		// natives
-		if(org.z.lexer.grammar.Type.isNativeType(className))
+		if(org.z.lexer.grammar.Type.isNativeType(className)) {
 			return new TypeResolution(className, null);
+		}
 		
 		// cycle through the class path to find the file
 		for(ClassPathItem cp : getClassPath()) {

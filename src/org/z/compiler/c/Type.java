@@ -12,8 +12,9 @@ public class Type
 		type.setBase(type.getBase());
 		
 		// ignore base types
-		if(org.z.lexer.grammar.Type.isNativeType(type.getBase()))
+		if(org.z.lexer.grammar.Type.isNativeType(type.getBase())) {
 			return;
+		}
 		
 		// only include the file if it exists
 		/*String libpath = c.getLibraryLocation() + "/" + type.getBase().replace('.', '/') + ".java";
@@ -23,10 +24,11 @@ public class Type
 		}*/
 		
 		Library lib = f.getCompiler().getLibrary();
-		if(lib.classExists(type.getBase()))
+		if(lib.classExists(type.getBase())) {
 			return;
+		}
 		
-		cf.addInclude(type);
+		cf.addInclude(type.resolveType(f));
 		//System.out.println("Add import: " + type.getBase());
 		try {
 			f.parseClass(type.getBase());

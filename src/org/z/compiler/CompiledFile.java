@@ -5,11 +5,11 @@ import java.util.HashMap;
 public class CompiledFile
 {
 	
-	private String fileName;
+	protected String fileName;
 	
-	private HashMap<String, StringBuilder> content = new HashMap<String, StringBuilder>();
+	protected HashMap<String, StringBuilder> content = new HashMap<String, StringBuilder>();
 	
-	private String[] sectionOrder = new String[] { "body" };
+	protected String[] sectionOrder = new String[] { "body" };
 
 	public String[] getSectionOrder()
 	{
@@ -69,12 +69,28 @@ public class CompiledFile
 		this.fileName = fileName;
 	}
 	
+	public void appendUniqueLine(String section, String str)
+	{
+		if(!content.containsKey(section)) {
+			content.put(section, new StringBuilder(str));
+		}
+		
+		for(String line : content.get(section).toString().split("\n")) {
+			if(line.equals(str)) {
+				return;
+			}
+		}
+		content.get(section).append(str + "\n");
+	}
+	
 	public void appendContent(String section, String str)
 	{
-		if(!content.containsKey(section))
+		if(!content.containsKey(section)) {
 			content.put(section, new StringBuilder(str));
-		else
+		}
+		else {
 			content.get(section).append(str);
+		}
 	}
 	
 	public void appendContent(String str)
@@ -84,8 +100,9 @@ public class CompiledFile
 	
 	public void addInclude(org.z.lexer.grammar.Type type)
 	{
-		if(!(type.getBase().replace('.', '_') + ".h").equals(getFileName()))
-			appendContent("includes", "#include \"" + type.getBase().replace('.', '_') + ".h\"\n");
+		//if(!(type.getBase().replace('.', '_') + ".h").equals(getFileName())) {
+			appendUniqueLine("includes", "#include \"" + type.toString().replace('.', '_') + ".h\"");
+		//}
 	}
 	
 }

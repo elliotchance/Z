@@ -75,6 +75,11 @@ public class File extends Renderable
 	{
 		return fileName;
 	}
+	
+	public String getPackageLocation()
+	{
+		return getFileName().substring(0, getFileName().lastIndexOf("/"));
+	}
 
 	public void setFileName(String fileName)
 	{

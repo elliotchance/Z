@@ -70,22 +70,31 @@ public class Type
 	
 	public String getSignature()
 	{
-		if(toString().equals("boolean"))
+		if(toString().equals("boolean")) {
 			return "Z";
-		if(toString().equals("byte"))
+		}
+		if(toString().equals("byte")) {
 			return "B";
-		if(toString().equals("char"))
+		}
+		if(toString().equals("char")) {
 			return "C";
-		if(toString().equals("short"))
+		}
+		if(toString().equals("short")) {
 			return "S";
-		if(toString().equals("int"))
+		}
+		if(toString().equals("int")) {
 			return "I";
-		if(toString().equals("long"))
+		}
+		if(toString().equals("long")) {
 			return "J";
-		if(toString().equals("float"))
+		}
+		if(toString().equals("float")) {
 			return "F";
-		if(toString().equals("double"))
+		}
+		if(toString().equals("double")) {
 			return "D";
+		}
+		
 		return "L" + toString().replace('.', '_');
 	}
 	
