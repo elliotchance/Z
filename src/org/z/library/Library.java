@@ -46,31 +46,35 @@ public class Library
 	public static String getIndent(int indent)
 	{
 		String r = "";
-		for(int i = 0; i < indent; ++i)
+		for(int i = 0; i < indent; ++i) {
 			r += "\t";
+		}
 		return r;
 	}
 	
 	public Package getPackage(String name) throws NoSuchEntityException
 	{
 		for(Package p : packages) {
-			if(p.getName().equals(name))
+			if(p.getName().equals(name)) {
 				return p;
+			}
 		}
 		throw new NoSuchEntityException(name + " (package)");
 	}
 	
 	public void addCurrentlyParsing(String name)
 	{
-		if(!isCurrentlyParsing(name))
+		if(!isCurrentlyParsing(name)) {
 			currentlyParsing.add(name);
+		}
 	}
 	
 	public boolean isCurrentlyParsing(String name)
 	{
 		for(String cl : currentlyParsing) {
-			if(cl.equals(name))
+			if(cl.equals(name)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -79,13 +83,15 @@ public class Library
 	{
 		try {
 			// check currently parsing first
-			if(isCurrentlyParsing(name))
+			if(isCurrentlyParsing(name)) {
 				return true;
+			}
 			
 			String[] parts = name.split(".");
 			Package p = getPackage(parts[0]);
-			for(int i = 1; i < parts.length; ++i)
+			for(int i = 1; i < parts.length; ++i) {
 				p = p.getSubpackage(parts[i]);
+			}
 			return true;
 		}
 		catch(ArrayIndexOutOfBoundsException e) {
@@ -96,12 +102,18 @@ public class Library
 		}
 	}
 	
-	public void registerClass(org.z.library.Class c) throws CompilerException
+	public synchronized void registerClass(org.z.library.Class c) throws CompilerException
 	{
-		if(c.getFullName().equals(""))
+		if(classExists(c.getFullName())) {
+			return;
+		}
+		if(c.getFullName().equals("")) {
 			throw new CompilerException("Class has no name.");
-		if(!isCurrentlyParsing(c.getFullName()) && classExists(c.getFullName()))
+		}
+		if(!isCurrentlyParsing(c.getFullName()) && classExists(c.getFullName())) {
 			throw new CompilerException("Class " + c.getFullName() + " is already registered.");
+		}
+		addCurrentlyParsing(c.getFullName());
 		
 		String[] parts = c.getFullName().split("\\.");
 		Package p;

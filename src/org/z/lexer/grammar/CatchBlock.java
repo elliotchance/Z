@@ -1,22 +1,29 @@
 package org.z.lexer.grammar;
 
+import java.util.ArrayList;
+
 public class CatchBlock extends Block
 {
 	
-	private String exceptionClass;
+	private ArrayList<String> exceptionClasses = new ArrayList<String>();
 	
 	private String exceptionVariable;
 	
 	private Block block = new Block();
 
-	public String getExceptionClass()
+	public ArrayList<String> getExceptionClasses()
 	{
-		return exceptionClass;
+		return exceptionClasses;
 	}
 
-	public void setExceptionClass(String exceptionClass)
+	public void setExceptionClasses(ArrayList<String> exceptionClasses)
 	{
-		this.exceptionClass = exceptionClass;
+		this.exceptionClasses = exceptionClasses;
+	}
+
+	public void addExceptionClass(String exceptionClass)
+	{
+		exceptionClasses.add(exceptionClass);
 	}
 
 	public String getExceptionVariable()

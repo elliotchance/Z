@@ -1,19 +1,19 @@
 #include "library.h"
 
 void _init() {
-    static_System = (System*) malloc(sizeof(System));
+    /*static_System = (System*) malloc(sizeof(System));
     static_System->out = (PrintStream*) malloc(sizeof(PrintStream));
     static_System->out->println_L = &println_L;
-    static_System->out->println_F = &println_F;
+    static_System->out->println_F = &println_F;*/
 }
 
-String* _String_new(char* raw) {
+/*String* _String_new(char* raw) {
     String *r = (String*) malloc(sizeof(String));
     r->len = strlen(raw);
     r->data = (char*) malloc(r->len + 1);
     memmove(r->data, raw, r->len);
     return r;
-}
+}*/
 
 /*java_lang_Object* _Object_new(char* className, void* obj) {
     java_lang_Object *o = (java_lang_Object*) malloc(sizeof(java_lang_Object));
@@ -22,9 +22,8 @@ String* _String_new(char* raw) {
     return o;
 }*/
 
-void println_L(String *string) {
-    printf("%s\n", string->data);
-}
-void println_F(float f) {
-    printf("%g\n", f);
+void throwException(char* className, char* message)
+{
+    printf("%s: %s\n", className, message);
+    exit(1);
 }

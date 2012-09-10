@@ -57,7 +57,10 @@ public class ForStatement extends ComplexStatement
 		String r = indent(indent) + "for(";
 		if(before != null)
 			r += before.toString();
-		r += "; " + condition.toString() + "; ";
+		r += "; ";
+		if(condition != null)
+			r += condition.toString();
+		r += "; ";
 		if(iterate != null)
 			r += iterate.toString();
 		r += ") {\n" + block.toString(indent + 1) + indent(indent) + "}\n";

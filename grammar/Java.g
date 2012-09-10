@@ -6,16 +6,20 @@ options {
 
 tokens {
 	K_ABSTRACT = 'abstract';
+	K_ASSERT = 'assert';
 	K_BOOLEAN = 'boolean';
 	K_BREAK = 'break';
 	K_BYTE = 'byte';
+	K_CASE = 'case';
 	K_CATCH = 'catch';
 	K_CHAR = 'char';
 	K_CLASS = 'class';
 	K_CONTINUE = 'continue';
+	K_DEFAULT = 'default';
 	K_DO = 'do';
 	K_DOUBLE = 'double';
 	K_ELSE = 'else';
+	K_ENUM = 'enum';
 	K_EXTENDS = 'extends';
 	K_FALSE = 'false';
 	K_FINAL = 'final';
@@ -40,6 +44,7 @@ tokens {
 	K_SHORT = 'short';
 	K_STATIC = 'static';
 	K_SUPER = 'super';
+	K_SWITCH = 'switch';
 	K_SYNCHRONIZED = 'synchronized';
 	K_THIS = 'this';
 	K_THROW = 'throw';
@@ -73,7 +78,11 @@ INT :	'0'..'9'+
 LONG
 	:	'0'..'9'+ ('L' | 'l')
     ;
-    
+        
+HEX_LONG
+	:	'0x' HEX_DIGIT+ 'L'
+    ;
+        
 HEX
 	:	'0x' HEX_DIGIT+
     ;
@@ -172,11 +181,15 @@ run returns [org.z.lexer.grammar.File result]
 			})
 			|
 			(intDef=interfaceDefinition {
-				$result.addInterface(intDef.result);
+				$result.addObject(intDef.result);
 			})
 			|
-			(def=classDefinition {
-				$result.addClass(def.result);
+			(classDef=classDefinition {
+				$result.addObject(classDef.result);
+			})
+			|
+			(enumDef=enumDefinition {
+				$result.addObject(enumDef.result);
 			})
 		)*
 	;
@@ -201,6 +214,61 @@ importDefinition returns [java.lang.String result]
 			}
 		)
 		';'
+	;
+
+enumDefinition returns [org.z.lexer.grammar.Enum result]
+	:	{
+			$result = new org.z.lexer.grammar.Enum();
+		}
+		(perm=permission {
+				$result.setPermission(perm.result);
+		})?
+		K_ENUM
+		(theClassName=ID {
+			if(activePackageName != null)
+				$result.setName(activePackageName + "." + theClassName.getText());
+			else
+				$result.setName(theClassName.getText());
+		})
+		'{'
+		(ev=enumValue {
+			$result.addValue(ev.result);
+		})?
+		(
+			','
+			ev=enumValue {
+				$result.addValue(ev.result);
+			}
+		)*
+		';'?
+		
+		(
+			// constructor
+			(annotation* keyword* ID '(') => (m=method {
+				$result.setConstructor(m.result);
+			})
+			|
+			// member variables
+			(annotation* keywordNoType* type ID ('[' ']')* (',' | ';' | '=')) => (var=variableDefinitions {
+				$result.addInstanceVariable(var.result);
+			} ';')
+		)*
+		
+		'}'
+	;
+	
+enumValue returns [org.z.lexer.grammar.EnumValue result]
+	:	{
+			$result = new org.z.lexer.grammar.EnumValue();
+		}
+		name=ID {
+			$result.setName(name.getText());
+		}
+		('(' arguments=expressionList ')')? {
+			if(arguments != null) {
+				$result.setArguments(arguments.result);
+			}
+		}
 	;
     
 classDefinition returns [org.z.lexer.grammar.Class result]
@@ -256,29 +324,40 @@ classBody returns [org.z.lexer.grammar.ClassBody result]
 		}
 		'{'
 		(
-			(keyword* K_CLASS ID) => (classDef=classDefinition {
-				$result.addClass(classDef.result);
-			})
-			|
-			(annotation* keyword* type ID '(') => (m=method {
-				$result.addMethod(m.result);
-			})
-			|
-			(keyword* genericDefinition? type ID genericDefinition? ('[' ']')* '(') => (m=method {
-				$result.addMethod(m.result);
-			})
-			|
-			(keywordNoType* type ID ('[' ']')* (',' | ';' | '=')) => (var=variableDefinitions {
-				$result.addInstanceVariable(var.result);
-			} ';')
-			|
-			(annotation* keyword* ID '(') => (m=method {
-				$result.addMethod(m.result);
-			})
-			|
-			(K_STATIC stmts=block {
-				$result.setStaticBlock(stmts.result);
-			})
+			(
+				(keyword* K_ENUM) => (enumDef=enumDefinition {
+					$result.addObject(enumDef.result);
+				})
+				|
+				(keyword* K_INTERFACE) => (intDef=interfaceDefinition {
+					$result.addObject(intDef.result);
+				})
+				|
+				(keyword* K_CLASS ID) => (classDef=classDefinition {
+					$result.addObject(classDef.result);
+				})
+				|
+				(annotation* keyword* type ID '(') => (m=method {
+					$result.addMethod(m.result);
+				})
+				|
+				(keyword* genericDefinition? type ID genericDefinition? ('[' ']')* '(') => (m=method {
+					$result.addMethod(m.result);
+				})
+				|
+				(annotation* keywordNoType* type ID ('[' ']')* (',' | ';' | '=')) => (var=variableDefinitions {
+					$result.addInstanceVariable(var.result);
+				} ';')
+				|
+				(annotation* keyword* ID '(') => (m=method {
+					$result.addMethod(m.result);
+				})
+				|
+				(K_STATIC stmts=block {
+					$result.setStaticBlock(stmts.result);
+				})
+			)
+			';'?
 		)*
 		'}'
 	;
@@ -314,10 +393,10 @@ genericDefinitionBase returns [org.z.lexer.grammar.Type result]
 				}
 			)
 		)
-		(K_EXTENDS ext=fullName {
+		(K_EXTENDS ext=type {
 			$result = new org.z.lexer.grammar.Type("? extends " + ext.result);
 		})?
-		(K_SUPER sup=fullName {
+		(K_SUPER sup=type {
 			$result = new org.z.lexer.grammar.Type("? super " + sup.result);
 		})?
 	;
@@ -394,18 +473,18 @@ keywordType returns [java.lang.String result]
 	
 keywordNoType
 	:	(
-			K_ABSTRACT |
+			K_ABSTRACT | K_ASSERT |
 			K_BREAK |
-			K_CATCH | K_CLASS | K_CONTINUE |
-			K_DO |
-			K_ELSE | K_EXTENDS |
+			K_CASE | K_CATCH | K_CLASS | K_CONTINUE |
+			K_DEFAULT | K_DO |
+			K_ELSE | K_ENUM | K_EXTENDS |
 			K_FALSE | K_FINAL | K_FINALLY |
 			K_IF | K_IMPLEMENTS | K_IMPORT | K_INSTANCEOF | K_INTERFACE |
 			K_FOR |
 			K_NATIVE | K_NEW | K_NULL |
 			K_PACKAGE | K_PUBLIC | K_PRIVATE | K_PROTECTED |
 			K_RETURN |
-			K_STATIC | K_SUPER | K_SYNCHRONIZED |
+			K_STATIC | K_SUPER | K_SWITCH | K_SYNCHRONIZED |
 			K_THIS | K_THROW | K_THROWS | K_TRANSIENT | K_TRUE | K_TRY |
 			K_WHILE |
 			K_VOLATILE
@@ -414,11 +493,11 @@ keywordNoType
 	
 keyword
 	:	(
-			K_ABSTRACT |
+			K_ABSTRACT | K_ASSERT |
 			K_BOOLEAN | K_BREAK | K_BYTE |
-			K_CATCH | K_CHAR | K_CLASS | K_CONTINUE |
-			K_DO | K_DOUBLE |
-			K_ELSE | K_EXTENDS |
+			K_CASE | K_CATCH | K_CHAR | K_CLASS | K_CONTINUE |
+			K_DEFAULT | K_DO | K_DOUBLE |
+			K_ELSE | K_ENUM | K_EXTENDS |
 			K_FALSE | K_FINAL | K_FINALLY | K_FLOAT |
 			K_IF | K_IMPLEMENTS | K_IMPORT | K_INSTANCEOF | K_INT | K_INTERFACE
 			K_FOR |
@@ -426,7 +505,7 @@ keyword
 			K_NATIVE | K_NEW | K_NULL |
 			K_PACKAGE | K_PUBLIC | K_PRIVATE | K_PROTECTED |
 			K_RETURN |
-			K_SHORT | K_STATIC | K_SUPER | K_SYNCHRONIZED |
+			K_SHORT | K_STATIC | K_SUPER | K_SWITCH | K_SYNCHRONIZED |
 			K_THIS | K_THROW | K_THROWS | K_TRANSIENT | K_TRUE | K_TRY |
 			K_WHILE |
 			K_VOID | K_VOLATILE
@@ -459,6 +538,10 @@ method returns [org.z.lexer.grammar.Method result]
 			|
 			(K_NATIVE {
 				$result.setIsNative(true);
+			})
+			|
+			(K_ABSTRACT {
+				$result.setIsAbstract(true);
 			})
 			|
 			(staticGeneric=genericDefinition {
@@ -568,7 +651,7 @@ complexStatement returns [org.z.lexer.grammar.ComplexStatement result]
 			$result = stmt3.result;
 		})
 		|
-		(K_FOR '(' (singleStatement | ';') expression ';' expressionList? ')') => (stmt4=forStatement {
+		(K_FOR '(' (singleStatement | ';') expression? ';' expressionList? ')') => (stmt4=forStatement {
 			$result = stmt4.result;
 		})
 		|
@@ -587,6 +670,50 @@ complexStatement returns [org.z.lexer.grammar.ComplexStatement result]
 		(stmt8=classDefinition {
 			$result = stmt8.result;
 		})
+		|
+		(stmt9=switchStatement {
+			$result = stmt9.result;
+		})
+	;
+	
+switchStatement returns [org.z.lexer.grammar.SwitchStatement result]
+	:	{
+			$result = new org.z.lexer.grammar.SwitchStatement();
+		}
+		K_SWITCH
+		'(' condition=expression ')' {
+			$result.setCondition(condition.result);
+		}
+		'{'
+		(
+			((K_CASE) => caseStmt=caseStatement {
+				$result.addCase(caseStmt.result);
+			})
+			|
+			((K_DEFAULT) => defaultStmt=defaultStatement {
+				$result.setDefaultCase(defaultStmt.result);
+			})
+		)*
+		'}'
+	;
+	
+defaultStatement returns [org.z.lexer.grammar.DefaultStatement result]
+	:	K_DEFAULT ':' {
+			$result = new org.z.lexer.grammar.DefaultStatement();
+		}
+		(stmt=statement {
+			$result.add(stmt.result);
+		})*
+	;
+	
+caseStatement returns [org.z.lexer.grammar.CaseStatement result]
+	:	K_CASE caseExpr=expression ':' {
+			$result = new org.z.lexer.grammar.CaseStatement();
+			$result.setCondition(caseExpr.result);
+		}
+		(caseStmt=statement {
+			$result.getBlock().add(caseStmt.result);
+		})*
 	;
 
 synchronizedStatement returns [org.z.lexer.grammar.SynchronizedStatement result]
@@ -636,11 +763,16 @@ tryBlock returns [org.z.lexer.grammar.TryBlock result]
 	;
 	
 catchBlock returns [org.z.lexer.grammar.CatchBlock result]
-	:	K_CATCH
-		'(' exClass=fullName exVar=ID ')'
-		catchStmt=block {
+	:	K_CATCH {
 			$result = new org.z.lexer.grammar.CatchBlock();
-			$result.setExceptionClass(exClass.result);
+		}
+		'('
+		(exClass=fullName '|'? {
+			$result.addExceptionClass(exClass.result);
+		})+
+		exVar=ID
+		')'
+		catchStmt=block {
 			$result.setExceptionVariable(exVar.getText());
 			$result.setBlock(catchStmt.result);
 		}
@@ -670,18 +802,23 @@ foreachStatement returns [org.z.lexer.grammar.ForeachStatement result]
 	
 forStatement returns [org.z.lexer.grammar.ForStatement result]
 	:	(
-			K_FOR '(' (before=singleStatement | ';') condition=expression ';' iterate=expressionList? ')'
+			K_FOR '(' (before=singleStatement | ';') condition=expression? ';' iterate=expressionList? ')'
 			(blk=singleOrBlock | ';')
 		)
 		{
 			$result = new org.z.lexer.grammar.ForStatement();
-			if(before != null) 
+			if(before != null) {
 				$result.setBefore(before.result);
-			$result.setCondition(condition.result);
-			if(iterate != null)
+			}
+			if(condition != null) {
+				$result.setCondition(condition.result);
+			}
+			if(iterate != null) {
 				$result.setIterate(iterate.result);
-			if(blk != null)
+			}
+			if(blk != null) {
 				$result.setBlock(blk.result);
+			}
 		}
 	;
 	
@@ -761,6 +898,9 @@ variableDefinitions returns [org.z.lexer.grammar.VariableDefinitions result]
 	:	{
 			$result = new org.z.lexer.grammar.VariableDefinitions();
 		}
+		('@') => (anno=annotation {
+			$result.addAnnotation(anno.result);
+		})*
 		(
 			(
 				(thePermission=permission {
@@ -811,6 +951,10 @@ singleStatement returns [org.z.lexer.grammar.SimpleStatement result]
 			|
 			(returnStmt=returnStatement {
 				$result = returnStmt.result;
+			} ';')
+			|
+			(assertStmt=assertStatement {
+				$result = assertStmt.result;
 			} ';')
 			|
 			(continueStmt=continueStatement {
@@ -875,12 +1019,25 @@ throwExpression returns [org.z.lexer.grammar.ThrowExpression result]
 			$result.setExpression(expr.result);
 		}
 	;
+		
+assertStatement returns [org.z.lexer.grammar.AssertStatement result]
+	:	(K_ASSERT expr=expression? (':' infoExpr=expression)?) {
+			$result = new org.z.lexer.grammar.AssertStatement();
+			if(expr != null) {
+				$result.setExpression(expr.result);
+			}
+			if(infoExpr != null) {
+				$result.setInformationExpression(infoExpr.result);
+			}
+		}
+	;
 	
 returnStatement returns [org.z.lexer.grammar.ReturnStatement result]
 	:	(K_RETURN expr=expression?) {
 			$result = new org.z.lexer.grammar.ReturnStatement();
-			if(expr != null)
+			if(expr != null) {
 				$result.setExpression(expr.result);
+			}
 		}
 	;
 	
@@ -927,6 +1084,10 @@ assignmentOperator returns [java.lang.String result]
 		|
 		('/' '=') => ('/' '=' {
 			$result = "/=";
+		})
+		|
+		('%' '=') => ('%' '=' {
+			$result = "\%=";
 		})
 		|
 		('<' '<' '=') => ('<' '<' '=' {
@@ -1074,6 +1235,10 @@ comparisonOperator returns [java.lang.String result]
 		('<') => ('<' {
 			$result = "<";
 		})
+		|
+		(K_INSTANCEOF) => (K_INSTANCEOF {
+			$result = "INSTANCEOF";
+		})
 	;
 	
 comparisonExpression returns [org.z.lexer.grammar.BinaryExpression result]
@@ -1088,7 +1253,7 @@ comparisonExpression returns [org.z.lexer.grammar.BinaryExpression result]
 		))*
 	; 
 				
-/*bitwiseOperator returns [java.lang.String result]
+bitwiseOperator returns [java.lang.String result]
 	:	(
 			('>' '>' {
 				$result = ">>";
@@ -1098,13 +1263,17 @@ comparisonExpression returns [org.z.lexer.grammar.BinaryExpression result]
 				$result = "<<";
 			})
 		)
-	;*/
+	;
 	
 bitwiseExpression returns [org.z.lexer.grammar.BinaryExpression result]
 	:	expr=additionExpression {
 			$result = expr.result;
 		}
-		// bitwiseOperator
+		((bitwiseOperator expression) => (
+			op=bitwiseOperator expr2=expression {
+				$result.addRight(new org.z.lexer.grammar.Right(op.result, expr2.result));
+			}
+		))*
 	;
 		
 additionOperator returns [java.lang.String result]
@@ -1136,6 +1305,10 @@ multiplyOperator returns [java.lang.String result]
 		|
 		('/' {
 			$result = "/";
+		})
+		|
+		('%' {
+			$result = "\%";
 		})
 	;
 	
@@ -1197,6 +1370,10 @@ preUnaryOperator returns [java.lang.String result]
 			$result = "-"; 
 		})
 		|
+		('+' {
+			$result = "+"; 
+		})
+		|
 		('!' {
 			$result = "!"; 
 		})
@@ -1206,24 +1383,9 @@ preUnaryOperator returns [java.lang.String result]
 		})
 	;
 	
-instanceOfExpression returns [org.z.lexer.grammar.InstanceOfExpression result]
-	:	left=ID {
-			$result = new org.z.lexer.grammar.InstanceOfExpression();
-			$result.setLeft(new org.z.lexer.grammar.Identifier(left.getText()));
-		}
-		K_INSTANCEOF
-		t=type {
-			$result.setRight(t.result);
-		}
-	;
-	
 unaryExpression returns [org.z.lexer.grammar.Expression result]
 	:	(('(' type ')' expression) => ce=castExpression {
 			$result = ce.result;
-		})
-		|
-		((ID K_INSTANCEOF) => ioe=instanceOfExpression {
-			$result = ioe.result;
 		})
 		|
 		(
@@ -1238,12 +1400,15 @@ unaryExpression returns [org.z.lexer.grammar.Expression result]
 			)
 			{
 				$result = expr.result;
-				if(pre != null)
+				if(pre != null) {
 					$result = new org.z.lexer.grammar.UnaryExpression($result, pre.result, true);
-				if(expr2 != null)
+				}
+				if(expr2 != null) {
 					$result = new org.z.lexer.grammar.AdditionExpression($result, ((op1 != null) ? op1.result : op2.result), expr2.result);
-				if(post != null)
+				}
+				if(post != null) {
 					$result = new org.z.lexer.grammar.UnaryExpression($result, post.result, false);
+				}
 			}
 		)
 	;
@@ -1267,8 +1432,9 @@ single returns [org.z.lexer.grammar.Expression result]
 			})
 		)
 		(aa=arrayAccess {
-			if(!($result instanceof org.z.lexer.grammar.ArrayAccess))
+			if(!($result instanceof org.z.lexer.grammar.ArrayAccess)) {
 				$result = new org.z.lexer.grammar.ArrayAccess($result);
+			}
 			((org.z.lexer.grammar.ArrayAccess) $result).addRight(new org.z.lexer.grammar.Right("[]", aa.result));
 		})*
 	;
@@ -1285,9 +1451,16 @@ value returns [org.z.lexer.grammar.Expression result]
 	:	{
 			$result = new org.z.lexer.grammar.Value();
 		}
-		(K_THIS {
+		(
+		(type) => (kw=type {
+			$result = new org.z.lexer.grammar.KeywordExpression(kw.result.toString());
+		})
+	|	K_THIS {
 			$result = new org.z.lexer.grammar.ThisExpression();
 		}
+	|	K_SUPER {
+			$result = new org.z.lexer.grammar.SuperExpression();
+					}
 	|	x1=INT {
 			((org.z.lexer.grammar.Value) $result).setValue(Integer.valueOf(x1.getText()));
 		}
@@ -1313,6 +1486,10 @@ value returns [org.z.lexer.grammar.Expression result]
 		}
 	|	x8=DOUBLE {
 			((org.z.lexer.grammar.Value) $result).setValue(Double.valueOf(x8.getText()));
+		}
+	|	x9=HEX_LONG {
+			String x9s = x9.getText();
+			((org.z.lexer.grammar.Value) $result).setValue(Long.parseLong(x9s.substring(2, x9s.length() - 3), 16));
 		}
 	|	newExpr=newExpression {
 			$result = newExpr.result;
@@ -1397,6 +1574,15 @@ interfaceDefinition returns [org.z.lexer.grammar.Interface result]
 			else
 				$result.setName(theInterfaceName.getText());
 		})
+		(generic=genericDefinition {
+			$result.setGeneric(generic.result); 
+		})?
+		(
+			K_EXTENDS
+			(imp=type ','? {
+				$result.addExtension(imp.result); 
+			})*
+		)?
 		(body=classBody {
 			$result.setBody(body.result);
 		})

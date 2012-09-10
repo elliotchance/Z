@@ -11,31 +11,21 @@ public class ClassBody extends Renderable
 	
 	private Block staticBlock = null;
 	
-	private ArrayList<Class> classes = new ArrayList<Class>();
+	private ArrayList<GenericObject> objects = new ArrayList<GenericObject>();
 	
-	public void addClass(Class c)
+	public void addObject(GenericObject c)
 	{
-		classes.add(c);
+		objects.add(c);
 	}
 
-	public ArrayList<Class> getClasses()
+	public ArrayList<GenericObject> getObjects()
 	{
-		return classes;
+		return objects;
 	}
 
-	public void setClasses(ArrayList<Class> classes)
+	public void setObjects(ArrayList<GenericObject> objects)
 	{
-		this.classes = classes;
-	}
-
-	public ArrayList<VariableDefinitions> getInstanceVariables()
-	{
-		return instanceVariables;
-	}
-
-	public void setInstanceVariables(ArrayList<VariableDefinitions> instanceVariables)
-	{
-		this.instanceVariables = instanceVariables;
+		this.objects = objects;
 	}
 
 	public ArrayList<Method> getMethods()
@@ -66,6 +56,16 @@ public class ClassBody extends Renderable
 	public void addInstanceVariable(VariableDefinitions iv)
 	{
 		instanceVariables.add(iv);
+	}
+
+	public ArrayList<VariableDefinitions> getInstanceVariables()
+	{
+		return instanceVariables;
+	}
+
+	public void setInstanceVariables(ArrayList<VariableDefinitions> instanceVariables)
+	{
+		this.instanceVariables = instanceVariables;
 	}
 	
 	@Override

@@ -2,7 +2,7 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class VariableDefinitions extends SimpleStatement
+public class VariableDefinitions extends SimpleStatement implements Annotatable
 {
 	
 	private Type type;
@@ -18,6 +18,8 @@ public class VariableDefinitions extends SimpleStatement
 	private boolean isTransient;
 	
 	private ArrayList<VariableDefinitionBase> variables = new ArrayList<VariableDefinitionBase>();
+	
+	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 	
 	public void addVariable(VariableDefinitionBase v)
 	{
@@ -92,6 +94,18 @@ public class VariableDefinitions extends SimpleStatement
 	public void setIsVolatile(boolean isVolatile)
 	{
 		this.isVolatile = isVolatile;
+	}
+
+	@Override
+	public void addAnnotation(Annotation anno)
+	{
+		annotations.add(anno);
+	}
+
+	@Override
+	public ArrayList<Annotation> getAnnotations()
+	{
+		return annotations;
 	}
 	
 }

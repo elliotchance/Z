@@ -20,29 +20,11 @@ public class ArgumentList extends ArrayList<Argument>
 		return r.toString();
 	}
 	
-	public String getSignature()
+	public String getSignature(org.z.compiler.Compiler c)
 	{
 		String r = "";
-		for(Argument a : this) {
-			if(a.getType().toString().equals("boolean"))
-				r += "Z";
-			else if(a.getType().toString().equals("byte"))
-				r += "B";
-			else if(a.getType().toString().equals("char"))
-				r += "C";
-			else if(a.getType().toString().equals("short"))
-				r += "S";
-			else if(a.getType().toString().equals("int"))
-				r += "I";
-			else if(a.getType().toString().equals("long"))
-				r += "J";
-			else if(a.getType().toString().equals("float"))
-				r += "F";
-			else if(a.getType().toString().equals("double"))
-				r += "D";
-			else
-				r += "L" + a.getAbsoluteType().getType().toString().replace('.', '_');
-		}
+		for(Argument a : this)
+			r += a.getType().getSignature();
 		return r;
 	}
 	

@@ -1,33 +1,15 @@
 package org.z.lexer.grammar;
 
-public class Interface
+import java.util.ArrayList;
+
+public class Interface extends GenericObject
 {
 	
-	private String name;
-	
-	private String permission = null;
-	
 	private ClassBody body;
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public String getPermission()
-	{
-		return permission;
-	}
-
-	public void setPermission(String permission)
-	{
-		this.permission = permission;
-	}
+	
+	private Generic generic = null;
+	
+	private ArrayList<Type> extensions = new ArrayList<Type>();
 
 	public ClassBody getBody()
 	{
@@ -37,6 +19,31 @@ public class Interface
 	public void setBody(ClassBody body)
 	{
 		this.body = body;
+	}
+
+	public Generic getGeneric()
+	{
+		return generic;
+	}
+
+	public void setGeneric(Generic generic)
+	{
+		this.generic = generic;
+	}
+
+	public ArrayList<Type> getExtensions()
+	{
+		return extensions;
+	}
+
+	public void setExtensions(ArrayList<Type> extensions)
+	{
+		this.extensions = extensions;
+	}
+	
+	public void addExtension(Type extension)
+	{
+		extensions.add(extension);
 	}
 	
 }

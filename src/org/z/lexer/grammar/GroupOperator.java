@@ -20,7 +20,8 @@ public class GroupOperator implements Expression
 	@Override
 	public Type getDataType() throws CompilerException
 	{
-		throw new CompilerException("Not supported yet.");
+		return new Type("???");
+		//throw new CompilerException("Not supported yet.");
 	}
 
 	@Override

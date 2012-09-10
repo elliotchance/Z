@@ -1,19 +1,14 @@
 package org.z.test;
 
 import java.io.File;
-import java.util.ArrayList;
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.z.system.ProcessExecuter;
 import org.z.system.ProcessOutput;
 import org.z.system.Resources;
 import static org.junit.Assert.*;
 import org.z.Main;
 import org.z.Z;
-import org.z.compiler.CompiledFile;
+import org.z.compiler.ClassPathItem;
 import org.z.compiler.CompilerException;
-import org.z.lexer.JavaLexer;
-import org.z.lexer.JavaParser;
 
 public class TestInOut
 {
@@ -35,10 +30,11 @@ public class TestInOut
 		
 		// run
 		try {
-			Main m = new Main();
-			Z z = new Z("", new String[] {inputFile});
+			Z z = new Z(new String[] {inputFile});
+			z.getClassPath().add(new ClassPathItem("../library", ""));
+			z.getClassPath().add(new ClassPathItem("../library/java/lang", "java/lang"));
 			z.setMainClass("org.z.test.HelloWorld");
-			m.run(z);
+			z.run();
 		}
 		catch(CompilerException e) {
 			e.printStackTrace();

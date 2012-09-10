@@ -7,22 +7,27 @@ public class File extends Renderable
 	
 	private String fileName = null;
 	
-	private ArrayList<Class> classes = new ArrayList<Class>();
-	
-	private ArrayList<Interface> interfaces = new ArrayList<Interface>();
+	private ArrayList<GenericObject> objects = new ArrayList<GenericObject>();
 	
 	private String packageName = null;
 	
 	private ArrayList<String> imports = new ArrayList<String>();
 	
-	public void addInterface(Interface i)
+	private static org.z.compiler.c.File file = null;
+
+	public static org.z.compiler.c.File GetFile()
 	{
-		interfaces.add(i);
+		return file;
+	}
+
+	public static void SetFile(org.z.compiler.c.File file)
+	{
+		File.file = file;
 	}
 	
-	public void addClass(Class c)
+	public void addObject(GenericObject c)
 	{
-		classes.add(c);
+		objects.add(c);
 	}
 
 	public ArrayList<String> getImports()
@@ -35,14 +40,9 @@ public class File extends Renderable
 		this.imports = imports;
 	}
 
-	public ArrayList<Interface> getInterfaces()
+	public ArrayList<GenericObject> getObjects()
 	{
-		return interfaces;
-	}
-
-	public void setInterfaces(ArrayList<Interface> interfaces)
-	{
-		this.interfaces = interfaces;
+		return objects;
 	}
 	
 	@Override
@@ -52,17 +52,21 @@ public class File extends Renderable
 		
 		if(packageName != null) {
 			r.append(indent(indent));
-			r.append("package " + packageName + ";\n\n");
+			r.append("package ");
+			r.append(packageName);
+			r.append(";\n\n");
 		}
 		
 		for(String importName : imports) {
 			r.append(indent(indent));
-			r.append("import " + importName + ";\n");
+			r.append("import ");
+			r.append(importName);
+			r.append(";\n");
 		}
 		if(imports.size() > 0)
 			r.append("\n");
 		
-		for(Class c : classes)
+		for(GenericObject c : objects)
 			r.append(c.toString(indent));
 		return r.toString();
 	}
@@ -75,11 +79,6 @@ public class File extends Renderable
 	public void setFileName(String fileName)
 	{
 		this.fileName = fileName;
-	}
-
-	public ArrayList<Class> getClasses()
-	{
-		return classes;
 	}
 
 	public String getPackageName()

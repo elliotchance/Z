@@ -12,8 +12,10 @@ public class Block extends ComplexStatement
 	{
 		StringBuilder r = new StringBuilder();
 		for(Statement a : statements) {
-			r.append(a.toString(indent));
-			r.append("\n");
+			if(a != null) {
+				r.append(a.toString(indent));
+				r.append("\n");
+			}
 		}
 		return r.toString();
 	}

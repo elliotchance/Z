@@ -15,6 +15,8 @@ public class Method extends Renderable implements Annotatable
 	
 	private boolean isSynchronized = false;
 	
+	private boolean isAbstract = false;
+	
 	private String permission = null;
 	
 	private Type returnType = null;
@@ -143,13 +145,19 @@ public class Method extends Renderable implements Annotatable
 			r.append("final ");
 		if(isNative)
 			r.append("native ");
+		if(isAbstract)
+			r.append("abstract ");
+		if(isSynchronized)
+			r.append("synchronized ");
 		
 		if(returnType != null)
 			r.append(returnType.toString());
 		r.append(" ");
 		r.append(name);
 		r.append("(");
-		r.append(arguments.toString());
+		if(null != arguments) {
+			r.append(arguments.toString());
+		}
 		r.append(")");
 		
 		if(!throwList.isEmpty()) {
@@ -213,6 +221,16 @@ public class Method extends Renderable implements Annotatable
 	public void setIsSynchronized(boolean isSynchronized)
 	{
 		this.isSynchronized = isSynchronized;
+	}
+
+	public boolean isIsAbstract()
+	{
+		return isAbstract;
+	}
+
+	public void setIsAbstract(boolean isAbstract)
+	{
+		this.isAbstract = isAbstract;
 	}
 	
 }

@@ -2,20 +2,14 @@ package org.z.lexer.grammar;
 
 import java.util.ArrayList;
 
-public class Class extends ComplexStatement
+public class Class extends GenericObject
 {
-	
-	private String name = null;
-	
-	private String permission = null;
 	
 	private boolean isFinal = false;
 	
 	private boolean isStatic = false;
 	
 	private boolean isAbstract = false;
-	
-	private String packageName = null;
 	
 	private Type extension = null;
 	
@@ -24,16 +18,6 @@ public class Class extends ComplexStatement
 	private Generic generic = null;
 	
 	private ClassBody body;
-
-	public String getPermission()
-	{
-		return permission;
-	}
-
-	public void setPermission(String permission)
-	{
-		this.permission = permission;
-	}
 
 	public boolean isIsStatic()
 	{
@@ -64,34 +48,6 @@ public class Class extends ComplexStatement
 	{
 		return implementsList;
 	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public String getFullName()
-	{
-		String r = name;
-		if(packageName != null && !packageName.equals(""))
-			r = packageName + "." + name;
-		return r;
-	}
-
-	public void setName(String name)
-	{
-		String[] parts = name.split("\\.");
-		this.packageName = "";
-		boolean first = true;
-		for(int i = 0; i < parts.length - 1; ++i) {
-			if(first)
-				first = false;
-			else
-				this.packageName += ".";
-			this.packageName += parts[i];
-		}
-		this.name = parts[parts.length - 1];
-	}
 	
 	@Override
 	public String toString(int indent)
@@ -118,16 +74,6 @@ public class Class extends ComplexStatement
 	public void setIsFinal(boolean isFinal)
 	{
 		this.isFinal = isFinal;
-	}
-
-	public String getPackageName()
-	{
-		return packageName;
-	}
-
-	public void setPackageName(String packageName)
-	{
-		this.packageName = packageName;
 	}
 
 	public ClassBody getBody()

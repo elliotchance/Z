@@ -24,8 +24,13 @@ public class ProcessExecuter
 		BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
 		// read any errors from the attempted command
-		while((s = stdError.readLine()) != null)
+		while((s = stdError.readLine()) != null) {
 			stderr.append(s + "\n");
+			if(stderr.length() > 10000) {
+				System.err.println(stderr);
+				System.exit(1);
+			}
+		}
 
 		// read the output from the command
 		while ((s = stdInput.readLine()) != null)

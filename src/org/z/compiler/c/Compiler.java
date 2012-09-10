@@ -1,10 +1,15 @@
 package org.z.compiler.c;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.z.Main;
-import org.z.compiler.CompiledFile;
-import org.z.compiler.CompilerException;
+import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.z.Z;
+import org.z.compiler.*;
+import org.z.lexer.JavaLexer;
+import org.z.lexer.JavaParser;
 import org.z.lexer.grammar.File;
 import org.z.library.Library;
 
@@ -13,11 +18,11 @@ public class Compiler implements org.z.compiler.Compiler
 	
 	private ArrayList<CompiledFile> files = new ArrayList<CompiledFile>();
 	
-	private Main main;
+	private Z z;
 	
-	public Compiler(Main main)
+	public Compiler(Z z)
 	{
-		this.main = main;
+		this.z = z;
 	}
 	
 	@Override
@@ -52,27 +57,119 @@ public class Compiler implements org.z.compiler.Compiler
 		
 		// we must have these classes loaded
 		try {
-			main.parseFile(this, getLibraryLocation() + "/java/lang/Object.java");
+			parseClass("java.lang.Object");
 		}
 		catch(IOException e) {
 			throw new CompilerException(e.getMessage());
 		}
 	}
 	
-	public Main getMain()
-	{
-		return main;
-	}
-	
 	public Library getLibrary()
 	{
-		return main.getLibrary();
+		return z.getLibrary();
 	}
 	
 	@Override
-	public String getLibraryLocation()
+	public ClassPath getClassPath()
 	{
-		return "../library";
+		return z.getClassPath();
+	}
+	
+	@Override
+	public void parseFile(String file, String className) throws IOException, CompilerException
+	{
+		if(this.z.getLibrary().isCurrentlyParsing(className)) {
+			return;
+		}
+		
+		String inputFile = file.substring(file.lastIndexOf("/") + 1);
+		String rawInputFile = inputFile.substring(0, inputFile.lastIndexOf("."));
+		String base = file.substring(0, file.lastIndexOf("/"));
+
+		JavaLexer lex = new JavaLexer(new ANTLRFileStream(file, "UTF8"));
+		CommonTokenStream tokens = new CommonTokenStream(lex);
+
+		JavaParser g = new JavaParser(tokens);
+		try {
+			// parse
+			File f = g.run().result;
+			f.setFileName(file);
+
+			if(g.failed()) {
+				throw new CompilerException("Error parsing file.");
+			}
+
+			// compile Java
+			{
+				org.z.compiler.Compiler c = new org.z.compiler.java.Compiler();
+				c.addFile(f);
+				ArrayList<CompiledFile> compiledFiles = c.getCompiledFiles();
+				for(CompiledFile cf : compiledFiles) {
+					// create precompiled directory
+					String precompiledJava = cf.getFileName().replaceFirst("\\/library\\/", "/library_precompiled/");
+					String dir = precompiledJava.substring(0, precompiledJava.lastIndexOf('/'));
+					new java.io.File(dir).mkdirs();
+					
+					// write parsed java file
+					java.io.File out = new java.io.File(precompiledJava);
+					FileOutputStream outStream = new FileOutputStream(out);
+					outStream.write(cf.getContent().getBytes());
+				}
+			}
+
+			// compile C
+			addFile(f);
+		}
+		catch (RecognitionException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public TypeResolution findClass(String className) throws CompilerException
+	{
+		// natives
+		if(org.z.lexer.grammar.Type.isNativeType(className))
+			return new TypeResolution(className, null);
+		
+		// cycle through the class path to find the file
+		for(ClassPathItem cp : getClassPath()) {
+			if(new java.io.File(cp.getLocation() + "/" + className.replace('.', '/') + ".java").exists()) {
+				return new TypeResolution(cp.getRealLocation().replace('/', '.') + "." + className, cp.getLocation() +
+					"/" + className + ".java");
+			}
+		}
+		
+		// have to assume this is already correct
+		return new TypeResolution(className, null);
+	}
+	
+	@Override
+	public void parseClass(String className) throws IOException, CompilerException
+	{
+		// ignore natives
+		if(org.z.lexer.grammar.Type.isNativeType(className)) {
+			return;
+		}
+		
+		// cycle through the class path to find the file
+		for(ClassPathItem cp : getClassPath()) {
+			if(new java.io.File(cp.getLocation() + "/" + className.replace('.', '/') + ".java").exists()) {
+				String fullClassName = (cp.getBase() + '.' + className).replace('/', '.');
+				if(fullClassName.startsWith(".")) {
+					fullClassName = fullClassName.substring(1);
+				}
+				if(!z.getLibrary().classExists(className)) {
+					parseFile(cp.getLocation() + "/" + className.replace('.', '/') + ".java", fullClassName);
+				}
+				
+				return;
+			}
+		}
+		
+		// if the import cannot be found we return Object
+		parseClass("java.lang.Object");
+		//throw new CompilerException("No such class " + className);
 	}
 	
 }

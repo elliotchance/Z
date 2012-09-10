@@ -1,6 +1,6 @@
 package org.z.lexer.grammar;
 
-import java.util.ArrayList;
+import org.z.compiler.CompilerException;
 
 public class Type
 {
@@ -10,8 +10,6 @@ public class Type
 	private int depth = 0;
 	
 	private Generic generic = null;
-	
-	public static ArrayList<String> javaLangClasses = null;
 	
 	public Type()
 	{
@@ -28,17 +26,6 @@ public class Type
 		this.base = base;
 		this.depth = depth;
 		this.generic = generic;
-	}
-	
-	private void loadJavaLangClasses(org.z.compiler.Compiler c)
-	{
-		String[] files = new java.io.File(c.getLibraryLocation() + "/java/lang").list();
-		javaLangClasses = new ArrayList<String>();
-		for(String file : files) {
-			if(file.startsWith(".") || !file.endsWith(".java"))
-				continue;
-			javaLangClasses.add(file.substring(0, file.length() - 5));
-		}
 	}
 
 	public Generic getGeneric()
@@ -75,16 +62,31 @@ public class Type
 	public String toString()
 	{
 		String r = base;
-		for(int i = 0; i < depth; ++i)
+		for(int i = 0; i < depth; ++i) {
 			r += "[]";
+		}
 		return r;
 	}
 	
 	public String getSignature()
 	{
+		if(toString().equals("boolean"))
+			return "Z";
+		if(toString().equals("byte"))
+			return "B";
+		if(toString().equals("char"))
+			return "C";
+		if(toString().equals("short"))
+			return "S";
+		if(toString().equals("int"))
+			return "I";
+		if(toString().equals("long"))
+			return "J";
 		if(toString().equals("float"))
 			return "F";
-		return "L"; // + toString() + ";";
+		if(toString().equals("double"))
+			return "D";
+		return "L" + toString().replace('.', '_');
 	}
 	
 	public static boolean isNativeType(String name)
@@ -95,20 +97,22 @@ public class Type
 			name.equals("void") ||
 			name.equals("float") ||
 			name.equals("double") ||
-			name.equals("char"))
+			name.equals("char") ||
+			name.equals("void") ||
+			name.equals("long") ||
+			name.equals("short")) {
 			return true;
+		}
 		return false;
 	}
 	
-	public Type getAbsoluteType(org.z.compiler.Compiler c)
+	public Type resolveType(org.z.compiler.c.File f)
 	{
-		if(javaLangClasses == null)
-			loadJavaLangClasses(c);
-		
-		// check java.lang.*
-		for(String cl : javaLangClasses) {
-			if(base.equals(cl))
-				return new Type("java.lang." + base, depth, generic);
+		try {
+			setBase(f.findClass(getBase()).getClassName());
+		}
+		catch(CompilerException ce) {
+			ce.printStackTrace(System.err);
 		}
 		return this;
 	}

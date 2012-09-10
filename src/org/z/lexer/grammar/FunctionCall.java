@@ -47,7 +47,7 @@ public class FunctionCall implements Expression
 		if(arguments == null)
 			return expression.getDataType();
 		
-		System.out.println(Arrays.toString(arguments.getDataTypes()));
+		//System.out.println(Arrays.toString(arguments.getDataTypes()));
 		return new Type("???");
 		//throw new CompilerException("Not supported.");
 	}

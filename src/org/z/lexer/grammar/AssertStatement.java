@@ -1,9 +1,11 @@
 package org.z.lexer.grammar;
 
-public class ReturnStatement extends SimpleStatement
+public class AssertStatement extends SimpleStatement
 {
 	
 	private Expression expression;
+	
+	private Expression informationExpression;
 
 	@Override
 	public Expression getExpression()
@@ -20,16 +22,26 @@ public class ReturnStatement extends SimpleStatement
 	@Override
 	public String toString()
 	{
-		String r = "return";
+		String r = "assert";
 		if(expression != null)
 			r += " " + expression.toString();
-		return r + ";";
+		return r;
 	}
 
 	@Override
 	public String toString(int indent)
 	{
 		return indent(indent) + toString();
+	}
+
+	public Expression getInformationExpression()
+	{
+		return informationExpression;
+	}
+
+	public void setInformationExpression(Expression informationExpression)
+	{
+		this.informationExpression = informationExpression;
 	}
 	
 }

@@ -41,10 +41,12 @@ public class Class
 	public String toString(int indent)
 	{
 		String r = Library.getIndent(indent) + getName();
-		for(Variable v : variables)
+		for(Variable v : variables) {
 			r += "\n" + Library.getIndent(indent + 1) + v.toString();
-		for(Method m : methods)
+		}
+		for(Method m : methods) {
 			r += "\n" + Library.getIndent(indent + 1) + m.toString();
+		}
 		return r;
 	}
 	
