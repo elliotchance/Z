@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-09-10 23:15:06
+// $ANTLR 3.4 /Users/elliot/NetBeansProjects/Z/grammar/Java.g 2012-11-06 00:48:31
 
 	package org.z.lexer;
 
@@ -1987,14 +1987,22 @@ public class JavaLexer extends Lexer {
         try {
             int _type = HEX_LONG;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:83:2: ( '0x' ( HEX_DIGIT )+ 'L' )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:83:4: '0x' ( HEX_DIGIT )+ 'L'
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:83:2: ( '0' ( 'x' | 'X' ) ( HEX_DIGIT )+ 'L' )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:83:4: '0' ( 'x' | 'X' ) ( HEX_DIGIT )+ 'L'
             {
-            match("0x"); 
+            match('0'); 
+
+            if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
+                input.consume();
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;
+            }
 
 
-
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:83:9: ( HEX_DIGIT )+
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:83:20: ( HEX_DIGIT )+
             int cnt4=0;
             loop4:
             do {
@@ -2051,14 +2059,22 @@ public class JavaLexer extends Lexer {
         try {
             int _type = HEX;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:87:2: ( '0x' ( HEX_DIGIT )+ )
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:87:4: '0x' ( HEX_DIGIT )+
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:87:2: ( '0' ( 'x' | 'X' ) ( HEX_DIGIT )+ )
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:87:4: '0' ( 'x' | 'X' ) ( HEX_DIGIT )+
             {
-            match("0x"); 
+            match('0'); 
+
+            if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
+                input.consume();
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;
+            }
 
 
-
-            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:87:9: ( HEX_DIGIT )+
+            // /Users/elliot/NetBeansProjects/Z/grammar/Java.g:87:20: ( HEX_DIGIT )+
             int cnt5=0;
             loop5:
             do {
@@ -4260,8 +4276,8 @@ public class JavaLexer extends Lexer {
             "",
             "",
             "",
-            "\1\134\1\uffff\12\53\13\uffff\1\135\6\uffff\1\133\30\uffff"+
-            "\1\135\6\uffff\1\133\13\uffff\1\131",
+            "\1\134\1\uffff\12\53\13\uffff\1\135\6\uffff\1\133\13\uffff"+
+            "\1\131\14\uffff\1\135\6\uffff\1\133\13\uffff\1\131",
             "\1\134\1\uffff\12\53\13\uffff\1\135\6\uffff\1\133\30\uffff"+
             "\1\135\6\uffff\1\133",
             "",

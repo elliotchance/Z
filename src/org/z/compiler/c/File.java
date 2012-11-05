@@ -21,14 +21,12 @@ public class File extends CompileEntity
 		for(org.z.lexer.grammar.GenericObject cl : f.getObjects()) {
 			if(cl instanceof org.z.lexer.grammar.Class) {
 				// generate header file
-				//System.err.println(c.getOutputFolder() + "/" + cl.getFullName().replace('.', '_') + ".h");
 				CompiledFile headerFile = new CompiledFile(cl.getFullName().replace('.', '_') + ".h");
 				cl.setName(cl.getFullName());
 				new HeaderClass(this, headerFile, (org.z.lexer.grammar.Class) cl);
 				c.addCompiledFile(headerFile);
 
 				// generate c file
-				//System.err.println(c.getOutputFolder() + "/" + cl.getFullName().replace('.', '_') + ".c");
 				CompiledFile self = new CompiledFile(cl.getFullName().replace('.', '_') + ".c");
 				self.appendContent("#include \"" + cl.getFullName().replace('.', '_') + ".h\"\n\n");
 				cl.setName(cl.getFullName());
@@ -152,7 +150,7 @@ public class File extends CompileEntity
 		}*/
 		
 		// assume generic
-		System.out.println("Assume generic: " + className);
+		//System.out.println("Assume generic: " + className);
 		return new TypeResolution("java.lang.Object", f.getFileName());
 		//throw new CompilerException("Cannot find class " + className + " in " + f.getFileName() + ": Imports are " + f.getImports());
 	}

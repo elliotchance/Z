@@ -21,9 +21,9 @@ public class HeaderClass extends CompileEntity
 		cf.appendContent("includes", "#define _H_" + c.getFullName().replace('.', '_') + " 1\n\n");
 		cf.appendContent("includes", "#include \"library.h\"\n");
 		// do not include Object on itself
-		if(!c.getFullName().replace('.', '_').equals("java_lang_Object")) {
-			cf.appendContent("includes", "#include \"java_lang_Object.h\"\n");
-		}
+		//if(!c.getFullName().replace('.', '_').equals("java_lang_Object")) {
+		//	cf.appendContent("includes", "#include \"java_lang_Object.h\"\n");
+		//}
 		cf.setSectionOrder(new String[] { "includes", "body" });
 		
 		cf.appendContent("struct " + c.getFullName().replace('.', '_') + ";\n\n");
@@ -41,7 +41,7 @@ public class HeaderClass extends CompileEntity
 			}
 			else {
 				returnType.resolveType(f);
-				org.z.compiler.c.Type.register(returnType, cf, f);
+				//org.z.compiler.c.Type.register(returnType, cf, f);
 				cf.appendContent(Method.getCType(returnType, "struct ") + " (*" + m.getName());
 			}
 			
@@ -82,7 +82,7 @@ public class HeaderClass extends CompileEntity
 				cf.appendContent("void ");
 			}
 			else {
-				org.z.compiler.c.Type.register(m.getReturnType(), cf, f);
+				//org.z.compiler.c.Type.register(m.getReturnType(), cf, f);
 				cf.appendContent(Method.getCType(m.getReturnType(), "struct ") + " ");
 			}
 			

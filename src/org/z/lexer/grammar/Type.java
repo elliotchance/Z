@@ -1,5 +1,6 @@
 package org.z.lexer.grammar;
 
+import java.util.ArrayList;
 import org.z.compiler.CompilerException;
 
 public class Type
@@ -10,6 +11,8 @@ public class Type
 	private int depth = 0;
 	
 	private Generic generic = null;
+	
+	private ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 	
 	public Type()
 	{
@@ -125,5 +128,26 @@ public class Type
 		}
 		return this;
 	}
+
+	public ArrayList<Annotation> getAnnotations()
+	{
+		return annotations;
+	}
+
+	public void setAnnotations(ArrayList<Annotation> annotations)
+	{
+		this.annotations = annotations;
+	}
+
+	public void addAnnotation(Annotation annotation)
+	{
+		this.annotations.add(annotation);
+	}
+    
+    public Type increaseDepth()
+    {
+        ++depth;
+        return this;
+    }
 	
 }

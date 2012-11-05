@@ -47,10 +47,12 @@ public class Package
 	public String toString(int indent)
 	{
 		String r = Library.getIndent(indent) + name;
-		for(Class c : classes)
+		for(Class c : classes) {
 			r += "\n" + c.toString(indent + 1);
-		for(Package p : subpackages)
-			r += "\n" + p.toString(indent + 1);
+        }
+		for(Package p : subpackages) {
+            r += "\n" + p.toString(indent + 1);
+        }
 		return r;
 	}
 	
@@ -63,8 +65,9 @@ public class Package
 	public Package getSubpackage(String name) throws NoSuchEntityException
 	{
 		for(Package p : subpackages) {
-			if(p.getName().equals(name))
+			if(p.getName().equals(name)) {
 				return p;
+            }
 		}
 		throw new NoSuchEntityException(name + " (package)");
 	}

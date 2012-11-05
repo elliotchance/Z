@@ -17,6 +17,8 @@ public class Compiler implements org.z.compiler.Compiler
 {
 	
 	private ArrayList<CompiledFile> files = new ArrayList<CompiledFile>();
+    
+    private JavaLexer lex = null;
 	
 	private Z z;
 	
@@ -28,7 +30,7 @@ public class Compiler implements org.z.compiler.Compiler
 	@Override
 	public void addFile(File f) throws CompilerException
 	{
-		CompileEntity file = new org.z.compiler.c.File(this, f);
+		new org.z.compiler.c.File(this, f);
 	}
 
 	@Override
@@ -76,17 +78,13 @@ public class Compiler implements org.z.compiler.Compiler
 	}
 	
 	@Override
-	public void parseFile(String file, String className) throws IOException, CompilerException
+	public void parseFile(String file) throws IOException, CompilerException
 	{
-		if(this.z.getLibrary().isCurrentlyParsing(className)) {
-			return;
-		}
-		
 		String inputFile = file.substring(file.lastIndexOf("/") + 1);
 		String rawInputFile = inputFile.substring(0, inputFile.lastIndexOf("."));
 		String base = file.substring(0, file.lastIndexOf("/"));
 
-		JavaLexer lex = new JavaLexer(new ANTLRFileStream(file, "UTF8"));
+		lex = new JavaLexer(new ANTLRFileStream(file, "UTF8"));
 		CommonTokenStream tokens = new CommonTokenStream(lex);
 
 		JavaParser g = new JavaParser(tokens);
@@ -97,6 +95,11 @@ public class Compiler implements org.z.compiler.Compiler
 
 			if(g.failed()) {
 				throw new CompilerException("Error parsing file.");
+			}
+			
+			// always compile imports
+			for(String importName : f.getImports()) {
+				parseClass(importName);
 			}
 
 			// compile Java
@@ -161,7 +164,8 @@ public class Compiler implements org.z.compiler.Compiler
 					fullClassName = fullClassName.substring(1);
 				}
 				if(!z.getLibrary().classExists(className)) {
-					parseFile(cp.getLocation() + "/" + className.replace('.', '/') + ".java", fullClassName);
+                    z.getLibrary().addToFileQueue(cp.getLocation() + "/" + className.replace('.', '/') + ".java");
+					//parseFile(cp.getLocation() + "/" + className.replace('.', '/') + ".java", fullClassName);
 				}
 				
 				return;
@@ -172,5 +176,17 @@ public class Compiler implements org.z.compiler.Compiler
 		parseClass("java.lang.Object");
 		//throw new CompilerException("No such class " + className);
 	}
+
+    @Override
+    public void reset() throws CompilerException
+    {
+        files = new ArrayList<CompiledFile>();
+    }
+
+    @Override
+    public long getCompiledLineCount()
+    {
+        return lex.getLine();
+    }
 	
 }

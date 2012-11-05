@@ -43,7 +43,7 @@ public class Compiler implements org.z.compiler.Compiler
 	}
 
 	@Override
-	public void parseFile(String file, String className) throws IOException, CompilerException
+	public void parseFile(String file) throws IOException, CompilerException
 	{
 		throw new CompilerException("Not supported yet.");
 	}
@@ -53,5 +53,17 @@ public class Compiler implements org.z.compiler.Compiler
 	{
 		throw new CompilerException("Not supported yet.");
 	}
+
+    @Override
+    public void reset() throws CompilerException
+    {
+        throw new CompilerException("Not supported yet.");
+    }
+
+    @Override
+    public long getCompiledLineCount()
+    {
+        return 0;
+    }
 	
 }

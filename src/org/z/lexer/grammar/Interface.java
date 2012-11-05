@@ -10,6 +10,8 @@ public class Interface extends GenericObject
 	private Generic generic = null;
 	
 	private ArrayList<Type> extensions = new ArrayList<Type>();
+    
+    private boolean isStatic = false;
 
 	public ClassBody getBody()
 	{
@@ -45,5 +47,15 @@ public class Interface extends GenericObject
 	{
 		extensions.add(extension);
 	}
+
+    public boolean isStatic()
+    {
+        return isStatic;
+    }
+
+    public void setIsStatic(boolean isStatic)
+    {
+        this.isStatic = isStatic;
+    }
 	
 }

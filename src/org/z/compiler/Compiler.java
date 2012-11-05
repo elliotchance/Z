@@ -19,6 +19,10 @@ public interface Compiler
 	
 	public void parseClass(String className) throws IOException, CompilerException;
 	
-	public void parseFile(String file, String className) throws IOException, CompilerException;
+	public void parseFile(String file) throws IOException, CompilerException;
+	
+	public void reset() throws CompilerException;
+    
+    public long getCompiledLineCount();
 	
 }

@@ -101,7 +101,7 @@ public class CompiledFile
 	public void addInclude(org.z.lexer.grammar.Type type)
 	{
 		//if(!(type.getBase().replace('.', '_') + ".h").equals(getFileName())) {
-			appendUniqueLine("includes", "#include \"" + type.toString().replace('.', '_') + ".h\"");
+			appendUniqueLine("includes", "#include \"" + type.getBase().replace('.', '_') + ".h\"");
 		//}
 	}
 	

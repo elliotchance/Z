@@ -11,8 +11,9 @@ public class TryBlock extends Block
 	
 	public void addVariable(VariableDefinitions variable)
 	{
-		if(variables == null)
+		if(variables == null) {
 			variables = new ArrayList<VariableDefinitions>();
+        }
 		variables.add(variable);
 	}
 
